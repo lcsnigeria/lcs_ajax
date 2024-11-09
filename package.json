@@ -1,6 +1,6 @@
 {
   "name": "lcs_dystyle",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "LCS dySTYLE: A powerful JavaScript library for dynamic, class-based CSS styling. Apply responsive, complex, and custom styles directly through HTML class names, eliminating the need for external CSS files.",
   "main": "dist/ld.min.js",
   "module": "src/ld.js",
