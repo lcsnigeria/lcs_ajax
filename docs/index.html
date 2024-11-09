@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>ld.js</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">**LCS dySTYLE**: Dynamic Style Management System**Introduction**:The `LCS dySTYLE` system provides a powerful and flexible way to dynamically apply and manage CSS styles on HTML elements using class names. It leverages a set of class-based rules and regex patterns to interpret and apply styles, including handling pseudo-elements, media queries, animations, and direct property settings. This system is designed to enhance the control and responsiveness of styling in web applications by allowing developers to define styles dynamically through class names, saving the stress of creating static/external CSS files for each html page everytime you code.**About**:The `LCS dySTYLE` feature is a Javascript library aimed at simplifying the styling process for developers. Instead of creating external CSS files or manually adding internal CSS styles in the head tag, you can use class names to apply styles directly. This approach allows you to define styles once and use them throughout your HTML elements, streamlining the styling process and reducing the need for additional CSS (external) files.The `LCS dySTYLE` feature allows for extensive styling customization by encoding CSS properties and values directly into class names. This approach simplifies the process of applying complex styles, including:- Styling sibling elements using `lcsAllAfterThis` (same as lcsAFT) and `lcsAllBeforeThis`  (same as lcsABT) classes.- Utilizing `:hover`, `:focus`, `::before` and `::after` pseudo-elements with `lcsHover`  (same as `lcsHPE`), `lcsFocus` (same as `lcsFPE`), `lcsBefore` (same as `lcsBPE`) and `lcsAfter`  (same as `lcsAPE`) classes; the PE standing for Pseudo-Elements.- Implementing responsive designs with `lcsMediaScreen`, `lcsMediaQuery` or simply `lcsMQ` classes.- Applying direct CSS properties with `lcs[Property]_[value]` classes.**Getting Started**:To start using `LCS dySTYLE`, add the JS script tag as the first script tag in your head tag.**Usage** Define class names following the `lcs` naming convention to dynamically apply styles. The need for involving lcs in the class name is to differentiate between LCS dySTYLE functionality and your custom class names; and to also allow LCS dySTYLE system logics run its cause only on class names in your html elements that begins with lcs.The system will parse these class names and apply the corresponding styles to the elements. Note that CSS properties in class names should be in camel case of which first letter is in uppercase (e.g., `MarginTop`, and not `marginTop`), and values should be in lower case all throughout (e.g., `10px`. This `10PX` will not work). CSS values that are separated using hyphen(-) should be written without the hyphen(-) (e.g., `borderbox`. This `border-box` will not work). For media screen classes, the format should be `lcsMQ_MaxWidth600PX_FontSize_14px`, with underscores separating the MQ, Query definition, property and value, this will generate css rule for that element like this:'@media screen and (max-width: 600px) {     .lcsMQ_MaxWidth600PX_FontSize_14px {         font-size: 14px;     }}'- Direct implementation: `lcsBackgroundColor_red` would generate css rule :.lcsBackgroundColor_red {    background-color: red;};- For pseudo-elements: this `lcsBefore_BackgroundColor_red` would generate css rule :.lcsBefore_BackgroundColor_red::before {    background-color: red;}; and this `lcsHPE_BackgroundColor_red` would generate css rule :.lcsHPE_BackgroundColor_red:hover {    background-color: red;} - Advanced and multi definitions:`lcsAllOfType_BackgroundColor_red` will generate the rule for all the elements in the DOM of the same tagname.`lcsAllOfTypeWithin_BackgroundColor_red` will generate the rule for every elements of same tagname inside the element.`lcsAllChildLikeThis` will generate the rule for any element (of same tagname) whose parent's tagname is same as that of the referenced element's parent.`lcsChild_BackgroundColor_red` will generate the rule for the element's first child.`lcsChildFirst_BackgroundColor_red` the same as `lcsChild_BackgroundColor_red`.`lcsChild1_BackgroundColor_red` the same as `lcsChild_BackgroundColor_red`.`lcsChild2_BackgroundColor_red` will generate the rule for only the one at number 2 (second immediate child). any number can be used.`lcsChildLast_BackgroundColor_red` will generate the rule for the element's last child`. `lcsChildren_BackgroundColor_red` will generate the rule for the element's all immediate child.`lcsChildrenNotFirst_BackgroundColor_red` or `lcsChildrenNot1_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the first one.`lcsChildrenNotLast_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the last one.`lcsChildrenNot2_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the one at number 2 (second one). any number can be used.`lcsAllWithin_BackgroundColor_red` will generate the rule for every elements inside the element.`lcsSibling_BackgroundColor_red` will generate the rule for the element and its next first sibling.`lcsSibling2_BackgroundColor_red` will generate the rule for the element and only its next second sibling. any number can be used.`lcsSiblings_BackgroundColor_red` will generate the rule for the element and all its siblings. Notice the 's'.Note that using lcsSibling will always include the element itself; also using a number and the element in that number happens to be the same element you used it on, the rule will be style for only that element.- Of same tag name:`lcsChildOfType_BackgroundColor_red` will generate the rule for the element's first child of the same tag name.`lcsChildOfTypeFirst_BackgroundColor_red` the same as `lcsChildOfType_BackgroundColor_red`.`lcsChildOfType1_BackgroundColor_red` the same as `lcsChildOfType_BackgroundColor_red`.`lcsChildOfType2_BackgroundColor_red` will generate the rule for only the child element of same tag at number 2 (second immediate child). any number can be used.`lcsChildOfTypeLast_BackgroundColor_red` will generate the rule for the element's last child of same tagname`. `lcsChildrenOfType_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname.`lcsChildrenOfTypeNotFirst_BackgroundColor_red` or `lcsChildrenOfTypeNot1_BackgroundColor_red` will generate the rule for the element's all immediate child of same tag name excluding the first one.`lcsChildrenOfTypeNotLast_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname excluding the last one.`lcsChildrenOfTypeNot2_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname excluding the one at number 2 (second one). any number can be used.`lcsSiblingOfType_BackgroundColor_red` will generate the rule for the element and its next first sibling of same tagname.`lcsSiblingOfType2_BackgroundColor_red` will generate the rule for the element and only its next second sibling of same tagname. any number can be used.`lcsSiblingsOfType_BackgroundColor_red` will generate the rule for the element and all its siblings of same tagname. Notice the 's'.Note that using lcsSiblingOfType will always include the element itself; also using a number and the element in that number happens to be the same element you used it on, the rule will be style for only that element. - Multiple properties and valuesmultiple properties and values can be defined using one class name instead of having separate class name to set property and value:e.g. instead of this `class="lcsBackgroundColor_red lcsColor_green"`, you simplify it using this `class="lcsBackgroundColor.Color_red.green"`.The can also work together with the lcsMQ, the pseudos, and the advanced logics. Also you can define as many properties and values as you like. Just remember to separate properties and values with underscore, and for every number of value you set must equate/match the properties you set.- Complex css valuessome values for a single property in css requires multiple inputs and should be separated with spaces and comma, but it becomes dificult using dySTYLEsince you can't use spaces to wrap multiple values for a single properties it becomes difficult.However, thanks to hyphen; To settle this is using hyphen in place of spaces. e.g. lcsBorder_1px-solid-red,lcsBoxShadow_1px-0px-15px-#ccc, lcsBoxShadow.Border_1px-0px-15px-#ccc.1px-solid-red- Negative/Float values & OperatorsSince we use hyphen (which was supposed to be used to define negative values like) in place of spaces to define multi inputs for a single property,you can use `mn` to define your negative values. e.g. lcsMarginTop_mn4rem; this sets margin-top: -4rem;Similarly, as dySTYLE does not support the use of +, *, /, %, in your classnames, you use `pl` in place of +;`mp` in place of *; `dv` in place of /; and `pct` in place of %, e.g. `lcsFontSize_calc(60px-mn-12px)`.Now, setting values like 0.8rem (or .8rem), .1, will give problems since dots are used to separate multiple properties and values.So to settle this, you have to use a single `0` in place of `.`, which will be `08rem` instead of `0.8rem` or `.8rem`, and 01 instead of `.1` or `0.1`  - KeyFrame Animations class="lcsAnimation_name-1s-linear lcsAnimate_name_from[Color.FontSize_red.14px]to[Color.FontSize_green.30px]",class="lcsAnimation_name-1s-linear lcsAnimate_name_0pct[Color.FontSize_red.14px]100pct[Color.FontSize_green.30px]"We have the logics in place to detect invalid properties and/or values. Also when the numbers of properties defined mismatches the values; often times we log warning in the console indicating the affected class name provision and the element and the style won't be applied. (i.e. `lcsBackgroundTop_red` will log warning in the console)</div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ld.js.html">ld.js</a>, <a href="ld.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="dySTYLE.html">dySTYLE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AllValues">AllValues</a></li><li><a href="global.html#dySTYLE_BorderStyleValues">dySTYLE_BorderStyleValues</a></li><li><a href="global.html#dySTYLE_BoxModelValues">dySTYLE_BoxModelValues</a></li><li><a href="global.html#dySTYLE_ColorNames">dySTYLE_ColorNames</a></li><li><a href="global.html#dySTYLE_CursorValues">dySTYLE_CursorValues</a></li><li><a href="global.html#dySTYLE_DisplayValues">dySTYLE_DisplayValues</a></li><li><a href="global.html#dySTYLE_FlexValues">dySTYLE_FlexValues</a></li><li><a href="global.html#dySTYLE_FontFamilyValues">dySTYLE_FontFamilyValues</a></li><li><a href="global.html#dySTYLE_FontSizeValues">dySTYLE_FontSizeValues</a></li><li><a href="global.html#dySTYLE_FontStretchValues">dySTYLE_FontStretchValues</a></li><li><a href="global.html#dySTYLE_FontStyleValues">dySTYLE_FontStyleValues</a></li><li><a href="global.html#dySTYLE_FontVariantValues">dySTYLE_FontVariantValues</a></li><li><a href="global.html#dySTYLE_FontWeightValues">dySTYLE_FontWeightValues</a></li><li><a href="global.html#dySTYLE_GridValues">dySTYLE_GridValues</a></li><li><a href="global.html#dySTYLE_HeightValues">dySTYLE_HeightValues</a></li><li><a href="global.html#dySTYLE_ImageValues">dySTYLE_ImageValues</a></li><li><a href="global.html#dySTYLE_InternalStyleElement">dySTYLE_InternalStyleElement</a></li><li><a href="global.html#dySTYLE_ListStylePositionValues">dySTYLE_ListStylePositionValues</a></li><li><a href="global.html#dySTYLE_ListStyleTypeValues">dySTYLE_ListStyleTypeValues</a></li><li><a href="global.html#dySTYLE_MediaQueryCSSBucket">dySTYLE_MediaQueryCSSBucket</a></li><li><a href="global.html#dySTYLE_OverflowValues">dySTYLE_OverflowValues</a></li><li><a href="global.html#dySTYLE_PositionValues">dySTYLE_PositionValues</a></li><li><a href="global.html#dySTYLE_Properties">dySTYLE_Properties</a></li><li><a href="global.html#dySTYLE_RegularCSSBucket">dySTYLE_RegularCSSBucket</a></li><li><a href="global.html#dySTYLE_TextAlignValues">dySTYLE_TextAlignValues</a></li><li><a href="global.html#dySTYLE_TextDecorationLineValues">dySTYLE_TextDecorationLineValues</a></li><li><a href="global.html#dySTYLE_TextDecorationStyleValues">dySTYLE_TextDecorationStyleValues</a></li><li><a href="global.html#dySTYLE_TextOverflowValues">dySTYLE_TextOverflowValues</a></li><li><a href="global.html#dySTYLE_TextTransformValues">dySTYLE_TextTransformValues</a></li><li><a href="global.html#dySTYLE_TransitionValues">dySTYLE_TransitionValues</a></li><li><a href="global.html#dySTYLE_Values">dySTYLE_Values</a></li><li><a href="global.html#dySTYLE_VerticalAlignValues">dySTYLE_VerticalAlignValues</a></li><li><a href="global.html#dySTYLE_VisibilityValues">dySTYLE_VisibilityValues</a></li><li><a href="global.html#dySTYLE_WidthValues">dySTYLE_WidthValues</a></li><li><a href="global.html#lengthsPattern">lengthsPattern</a></li><li><a href="global.html#propertiesPattern">propertiesPattern</a></li><li><a href="global.html#valuesOnlyPattern">valuesOnlyPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

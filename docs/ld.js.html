@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ld.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ld.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @fileoverview
  * 
  * **LCS dySTYLE**: Dynamic Style Management System
@@ -118,7 +146,7 @@
  * However, thanks to hyphen; To settle this is using hyphen in place of spaces. e.g. lcsBorder_1px-solid-red,
  * lcsBoxShadow_1px-0px-15px-#ccc, lcsBoxShadow.Border_1px-0px-15px-#ccc.1px-solid-red
  * 
- * - Negative/Float values & Operators
+ * - Negative/Float values &amp; Operators
  * Since we use hyphen (which was supposed to be used to define negative values like) in place of spaces to define multi inputs for a single property,
  * you can use `mn` to define your negative values. e.g. lcsMarginTop_mn4rem; this sets margin-top: -4rem;
  * Similarly, as dySTYLE does not support the use of +, *, /, %, in your classnames, you use `pl` in place of +;
@@ -146,7 +174,7 @@ const specsSelectionPattern = `(?:${allOfTypeSpecsSelection}|${childSpecsSelecti
 
 /**
  * List of valid dySTYLE CSS property names.
- * @type {Array<string>}
+ * @type {Array&lt;string>} - Array of CSS property names.
  */
 const dySTYLE_Properties = [
     "accent-color", "align-content", "align-items", "align-self", "all",
@@ -258,7 +286,7 @@ const dySTYLE_Properties = [
 /**
  * List of CSS color names.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} The array of CSS color names.
  */
 const dySTYLE_ColorNames = [
     "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", 
@@ -289,7 +317,7 @@ const dySTYLE_ColorNames = [
 /**
  * List of acceptable CSS display values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS display values.
  */
 const dySTYLE_DisplayValues = [
     "-webkit-box", "-webkit-inline-box", 
@@ -311,7 +339,7 @@ const dySTYLE_DisplayValues = [
 /**
  * List of acceptable CSS flex values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS flex values.
  */
 const dySTYLE_FlexValues = [
     "auto", "column", "column-reverse", 
@@ -330,7 +358,7 @@ const dySTYLE_FlexValues = [
 /**
  * List of acceptable CSS grid values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS grid values.
  */
 const dySTYLE_GridValues = [
     "auto", "auto-fill", 
@@ -347,7 +375,7 @@ const dySTYLE_GridValues = [
 /**
  * List of acceptable CSS list style position values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS list style positions.
  */
 const dySTYLE_ListStylePositionValues = [
     "inside", 
@@ -360,7 +388,7 @@ const dySTYLE_ListStylePositionValues = [
 /**
  * List of acceptable CSS list style type values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS list style types.
  */
 const dySTYLE_ListStyleTypeValues = [
     "arabic-indic", "circle", "cjk-earthly-branch", 
@@ -403,7 +431,7 @@ const dySTYLE_ListStyleTypeValues = [
 /**
  * List of acceptable CSS border styles.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS border styles.
  */
 const dySTYLE_BorderStyleValues = [
     "border-box", "content-box", 
@@ -417,7 +445,7 @@ const dySTYLE_BorderStyleValues = [
 /**
  * List of acceptable CSS width values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS width values.
  */
 const dySTYLE_WidthValues = [
     "auto", "available", "contain", 
@@ -430,7 +458,7 @@ const dySTYLE_WidthValues = [
 /**
  * List of acceptable CSS height values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS height values.
  */
 const dySTYLE_HeightValues = [
     "auto", "available", "fill-available", 
@@ -443,7 +471,7 @@ const dySTYLE_HeightValues = [
 /**
  * List of acceptable CSS font family values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS font family values.
  */
 const dySTYLE_FontFamilyValues = [
     "Arial", "Arial Black", "Comic Sans MS", 
@@ -461,7 +489,7 @@ const dySTYLE_FontFamilyValues = [
 /**
  * List of acceptable CSS font style values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS font style values.
  */
 const dySTYLE_FontStyleValues = [
     "defer", "inherit", "initial", 
@@ -472,7 +500,7 @@ const dySTYLE_FontStyleValues = [
 /**
  * List of acceptable CSS font variant values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS font variant values.
  */
 const dySTYLE_FontVariantValues = [
     "normal", "small-caps", 
@@ -483,7 +511,7 @@ const dySTYLE_FontVariantValues = [
 /**
  * List of acceptable CSS font weight values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS font weight values.
  */
 const dySTYLE_FontWeightValues = [
     "bold", "bolder", "lighter", 
@@ -495,7 +523,7 @@ const dySTYLE_FontWeightValues = [
 /**
  * List of acceptable CSS box model values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS box model values.
  */
 const dySTYLE_BoxModelValues = [
     "border-box", "content-box", 
@@ -508,7 +536,7 @@ const dySTYLE_BoxModelValues = [
 /**
  * List of acceptable CSS position values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS position values.
  */
 const dySTYLE_PositionValues = [
     "absolute", "fixed", 
@@ -520,7 +548,7 @@ const dySTYLE_PositionValues = [
 /**
  * List of acceptable CSS text transform values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS text transform values.
  */
 const dySTYLE_TextTransformValues = [
     "capitalize", "inherit", 
@@ -532,7 +560,7 @@ const dySTYLE_TextTransformValues = [
 /**
  * List of acceptable CSS text decoration line values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS text decoration line values.
  */
 const dySTYLE_TextDecorationLineValues = [
     "blink", "line-through", 
@@ -545,7 +573,7 @@ const dySTYLE_TextDecorationLineValues = [
 /**
  * List of acceptable CSS text decoration style values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS text decoration style values.
  */
 const dySTYLE_TextDecorationStyleValues = [
     "dashed", "dotted", 
@@ -558,7 +586,7 @@ const dySTYLE_TextDecorationStyleValues = [
 /**
  * List of acceptable CSS text align values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS text align values.
  */
 const dySTYLE_TextAlignValues = [
     "center", "end", 
@@ -571,7 +599,7 @@ const dySTYLE_TextAlignValues = [
 /**
  * List of acceptable CSS vertical align values.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing the names of CSS vertical align values.
  */
 const dySTYLE_VerticalAlignValues = [
     "baseline", "bottom", 
@@ -584,7 +612,7 @@ const dySTYLE_VerticalAlignValues = [
 
 /**
  * List of acceptable CSS text overflow values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS text overflow values.
  */
 const dySTYLE_TextOverflowValues = [
     "clip", "ellipsis", 
@@ -594,7 +622,7 @@ const dySTYLE_TextOverflowValues = [
 
 /**
  * List of acceptable CSS font stretch values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS font stretch values.
  */
 const dySTYLE_FontStretchValues = [
     "condensed", "default", "extra-condensed", 
@@ -609,7 +637,7 @@ const dySTYLE_FontStretchValues = [
 
 /**
  * List of acceptable CSS visibility values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS visibility values.
  */
 const dySTYLE_VisibilityValues = [
     "collapse", "hidden", 
@@ -620,7 +648,7 @@ const dySTYLE_VisibilityValues = [
 
 /**
  * List of acceptable CSS overflow values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS overflow values.
  */
 const dySTYLE_OverflowValues = [
     "anywhere", "auto", "break-word", "clip", "hidden", 
@@ -632,7 +660,7 @@ const dySTYLE_OverflowValues = [
 
 /**
  * List of acceptable CSS font size values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS font size values.
  */
 const dySTYLE_FontSizeValues = [
     "absolute", "auto", 
@@ -648,7 +676,7 @@ const dySTYLE_FontSizeValues = [
 
 /**
  * List of acceptable CSS transition values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS transition values.
  */
 const dySTYLE_TransitionValues = [
     "ease", "ease-in", 
@@ -660,7 +688,7 @@ const dySTYLE_TransitionValues = [
 
 /**
  * List of acceptable CSS cursor values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS cursor values.
  */
 const dySTYLE_CursorValues = [
     "alias", "all-scroll", "auto", "cell", "context-menu", "col-resize", "copy", 
@@ -673,7 +701,7 @@ const dySTYLE_CursorValues = [
 
 /**
  * List of acceptable CSS image-related values.
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of strings representing valid CSS image-related values.
  */
 const dySTYLE_ImageValues = [
     "cover"
@@ -682,7 +710,7 @@ const dySTYLE_ImageValues = [
 /**
  * Collects all CSS style values from various categories.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of unique CSS style values.
  */
 const AllValues = [
     ...dySTYLE_ColorNames,
@@ -717,7 +745,7 @@ const AllValues = [
 /**
  * List of all CSS style values from various categories.
  *
- * @type {Array<string>}
+ * @type {Array&lt;string>} An array of unique CSS style values.
  */
 const dySTYLE_Values = [...new Set(AllValues)];
 
@@ -1008,8 +1036,8 @@ class dySTYLE {
 
     #validateMediaQuery() {
 
-        if (this.#givenMediaQueryRule && 
-            this.#givenMediaQueryRule !== null && 
+        if (this.#givenMediaQueryRule &amp;&amp; 
+            this.#givenMediaQueryRule !== null &amp;&amp; 
             this.#givenMediaQueryRule !== undefined
         ) {
 
@@ -1030,7 +1058,7 @@ class dySTYLE {
             mqs_Result = mqs_Result.toLowerCase().replace(/_$/, '');
     
             const mqMatches = this.#givenMediaQueryRule.match(/(Orientation|MaxWidth|MaxHeight|MinWidth|MinHeight|MinResolution|MaxResolution)(Portrait|Landscape|\d+(?:DPPX|DPI|PX))((Orientation|MaxWidth|MaxHeight|MinWidth|MinHeight|MinResolution|MaxResolution)(Portrait|Landscape|\d+(?:DPPX|DPI|PX)))*/);
-            if (mqMatches && mqMatches.length > 2) {
+            if (mqMatches &amp;&amp; mqMatches.length > 2) {
                 mqMatches.forEach((mq) => {
     
                     if (mq) {
@@ -1044,7 +1072,7 @@ class dySTYLE {
     
                             // Validate the mqs lengths
                             const mqsL_Matches = mqs_Result.match(/(dpi|dppx|px)+/g);
-                            if (mqsL_Matches && mqsL_Matches.length > 0) {
+                            if (mqsL_Matches &amp;&amp; mqsL_Matches.length > 0) {
                                 mqsL_Matches.forEach((m) => {
                                     mqs_Result = mqs_Result.replace(/(dpi|dppx|px)+/g, `${m}) `);
                                 });
@@ -1138,7 +1166,7 @@ class dySTYLE {
             const propSHMap = { 'T': 'top', 'R': 'right', 'B': 'bottom', 'L': 'left' };
 
             // Handle single-direction shorthand combinations
-            if (propSHDirections && propSHDirections.length > 1) {
+            if (propSHDirections &amp;&amp; propSHDirections.length > 1) {
                 propSHDirections.forEach((dir) => {
                     if (propSHMap[dir]) {
                         this.#validatedProperties.push(`${propSHLeader}-${propSHMap[dir]}`); // Add validated properties to the array.
@@ -1248,7 +1276,7 @@ class dySTYLE {
 
             // Extract and validate operators in the calc() expression
             const matchedOperators = styleValue.match(/(pl|mn|mp|dv|pct)/g);
-            if (matchedOperators && matchedOperators.length > 0) {
+            if (matchedOperators &amp;&amp; matchedOperators.length > 0) {
 
                 // Replace dySTYLE operators with their mapped equivalents (e.g., 'pl' -> '+')
                 matchedOperators.forEach((mo) => {
@@ -1269,7 +1297,7 @@ class dySTYLE {
             // If has float: 0[0-9]; validate with decimal point
             if (/\b0[0-9]{1}/.test(styleValue)) {
                 const allDecimalNum = styleValue.match(/\b0[0-9]{1}/g);
-                if (allDecimalNum && allDecimalNum.length > 0) {
+                if (allDecimalNum &amp;&amp; allDecimalNum.length > 0) {
                     allDecimalNum.forEach((adn) => {
                         const numAfterDecimal = adn.match(/\d/g)[1];
                         if (!isNaN(Number(numAfterDecimal))) {
@@ -1281,7 +1309,7 @@ class dySTYLE {
 
             // Check if the value contains specific dySTYLE operators (like 'mn' or 'pct')
             const matchedOperators = styleValue.match(/(mn|pct)/g);
-            if (matchedOperators && matchedOperators.length > 0) {
+            if (matchedOperators &amp;&amp; matchedOperators.length > 0) {
                 // Replace operators with their corresponding symbols
                 matchedOperators.forEach((mo) => {
 
@@ -1380,7 +1408,7 @@ class dySTYLE {
         }
 
         // Determine if all segments matched by checking if there are no mismatches
-        regexMatched = regexMismatches.length <= 0 && regexMatches.length > 0;
+        regexMatched = regexMismatches.length &lt;= 0 &amp;&amp; regexMatches.length > 0;
 
         // Return the results in a structured object
         return {
@@ -1405,13 +1433,13 @@ class dySTYLE {
 
 /**
  * CSS Rules Bucket to store regular CSS rules.
- * @type {Array<string>}
+ * @type {Array&lt;string>}
  */
 const dySTYLE_RegularCSSBucket = [];
 
 /**
  * CSS Rules Bucket to store media query CSS rules.
- * @type {Array<string>}
+ * @type {Array&lt;string>}
  */
 const dySTYLE_MediaQueryCSSBucket = [];
 
@@ -1465,7 +1493,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         /**
          * NodeList of all elements within the body that have a class attribute.
-         * @type {NodeListOf<Element>}
+         * @type {NodeListOf&lt;Element>}
          */
         const allElementsWithClasses = bodyElement.querySelectorAll('[class]');
 
@@ -1491,9 +1519,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 /** 
                  * An array of individual class names for the current element, excluding empty strings.
-                 * @type {Array<string>}
+                 * @type {Array&lt;string>}
                  */
-                const classNamesArray = elementClassNames.split(' ').filter(item => item && item.toString().trim());
+                const classNamesArray = elementClassNames.split(' ').filter(item => item &amp;&amp; item.toString().trim());
 
                 if (classNamesArray.length > 0) {
                     // Iterate over each class name of the element
@@ -1507,7 +1535,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         /** 
                          * Match result for the current class name using the `dySTYLE` regex pattern.
-                         * @type {Array<string>|null}
+                         * @type {Array&lt;string>|null}
                          */
                         const matchedClassData = className.match(dySTYLE_ClassRegex);
 
@@ -1578,4 +1606,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="dySTYLE.html">dySTYLE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AllValues">AllValues</a></li><li><a href="global.html#dySTYLE_BorderStyleValues">dySTYLE_BorderStyleValues</a></li><li><a href="global.html#dySTYLE_BoxModelValues">dySTYLE_BoxModelValues</a></li><li><a href="global.html#dySTYLE_ColorNames">dySTYLE_ColorNames</a></li><li><a href="global.html#dySTYLE_CursorValues">dySTYLE_CursorValues</a></li><li><a href="global.html#dySTYLE_DisplayValues">dySTYLE_DisplayValues</a></li><li><a href="global.html#dySTYLE_FlexValues">dySTYLE_FlexValues</a></li><li><a href="global.html#dySTYLE_FontFamilyValues">dySTYLE_FontFamilyValues</a></li><li><a href="global.html#dySTYLE_FontSizeValues">dySTYLE_FontSizeValues</a></li><li><a href="global.html#dySTYLE_FontStretchValues">dySTYLE_FontStretchValues</a></li><li><a href="global.html#dySTYLE_FontStyleValues">dySTYLE_FontStyleValues</a></li><li><a href="global.html#dySTYLE_FontVariantValues">dySTYLE_FontVariantValues</a></li><li><a href="global.html#dySTYLE_FontWeightValues">dySTYLE_FontWeightValues</a></li><li><a href="global.html#dySTYLE_GridValues">dySTYLE_GridValues</a></li><li><a href="global.html#dySTYLE_HeightValues">dySTYLE_HeightValues</a></li><li><a href="global.html#dySTYLE_ImageValues">dySTYLE_ImageValues</a></li><li><a href="global.html#dySTYLE_InternalStyleElement">dySTYLE_InternalStyleElement</a></li><li><a href="global.html#dySTYLE_ListStylePositionValues">dySTYLE_ListStylePositionValues</a></li><li><a href="global.html#dySTYLE_ListStyleTypeValues">dySTYLE_ListStyleTypeValues</a></li><li><a href="global.html#dySTYLE_MediaQueryCSSBucket">dySTYLE_MediaQueryCSSBucket</a></li><li><a href="global.html#dySTYLE_OverflowValues">dySTYLE_OverflowValues</a></li><li><a href="global.html#dySTYLE_PositionValues">dySTYLE_PositionValues</a></li><li><a href="global.html#dySTYLE_Properties">dySTYLE_Properties</a></li><li><a href="global.html#dySTYLE_RegularCSSBucket">dySTYLE_RegularCSSBucket</a></li><li><a href="global.html#dySTYLE_TextAlignValues">dySTYLE_TextAlignValues</a></li><li><a href="global.html#dySTYLE_TextDecorationLineValues">dySTYLE_TextDecorationLineValues</a></li><li><a href="global.html#dySTYLE_TextDecorationStyleValues">dySTYLE_TextDecorationStyleValues</a></li><li><a href="global.html#dySTYLE_TextOverflowValues">dySTYLE_TextOverflowValues</a></li><li><a href="global.html#dySTYLE_TextTransformValues">dySTYLE_TextTransformValues</a></li><li><a href="global.html#dySTYLE_TransitionValues">dySTYLE_TransitionValues</a></li><li><a href="global.html#dySTYLE_Values">dySTYLE_Values</a></li><li><a href="global.html#dySTYLE_VerticalAlignValues">dySTYLE_VerticalAlignValues</a></li><li><a href="global.html#dySTYLE_VisibilityValues">dySTYLE_VisibilityValues</a></li><li><a href="global.html#dySTYLE_WidthValues">dySTYLE_WidthValues</a></li><li><a href="global.html#lengthsPattern">lengthsPattern</a></li><li><a href="global.html#propertiesPattern">propertiesPattern</a></li><li><a href="global.html#valuesOnlyPattern">valuesOnlyPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
