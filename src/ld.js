@@ -4,145 +4,153 @@
  * **LCS dySTYLE**: Dynamic Style Management System
  * 
  * **Introduction**:
- * The `LCS dySTYLE` system provides a powerful and flexible way to dynamically apply and 
- * manage CSS styles on HTML elements using class names. It leverages a set of class-based 
- * rules and regex patterns to interpret and apply styles, including handling pseudo-elements, 
- * media queries, animations, and direct property settings. This system is designed to enhance the control 
- * and responsiveness of styling in web applications by allowing developers to define styles 
- * dynamically through class names, saving the stress of creating static/external CSS files for each 
- * html page everytime you code.
+ * `LCS dySTYLE` is a powerful JavaScript library designed to dynamically apply and manage CSS styles on HTML elements through class names.
+ * Using a set of class-based rules and regex patterns, it interprets and applies complex styles, including pseudo-elements, media queries, animations, 
+ * and direct property settings. This system enhances styling control and responsiveness in web applications by allowing developers to define 
+ * styles dynamically through class names, minimizing the need to create static CSS files for every HTML page.
  * 
  * **About**:
- * The `LCS dySTYLE` feature is a Javascript library aimed at simplifying the styling process for developers. 
- * Instead of creating external CSS files or manually adding internal CSS styles in the head tag, 
- * you can use class names to apply styles directly. This approach allows you to define styles once 
- * and use them throughout your HTML elements, streamlining the styling process and reducing the need 
- * for additional CSS (external) files.
+ * The `LCS dySTYLE` library aims to simplify the styling process. Instead of creating external CSS files or adding styles manually in the `<head>` tag, 
+ * you can apply styles directly using class names. This approach allows you to define styles once and reuse them across HTML elements, streamlining 
+ * the styling process and reducing the need for additional CSS files.
  * 
- * The `LCS dySTYLE` feature allows for extensive styling customization by encoding CSS properties 
- * and values directly into class names. This approach simplifies the process of applying complex 
- * styles, including:
- * - Styling sibling elements using `lcsAllAfterThis` (same as lcsAFT) and `lcsAllBeforeThis` 
- *  (same as lcsABT) classes.
- * - Utilizing `:hover`, `:focus`, `::before` and `::after` pseudo-elements with `lcsHover` 
- *  (same as `lcsHPE`), `lcsFocus` (same as `lcsFPE`), `lcsBefore` (same as `lcsBPE`) and `lcsAfter` 
- *  (same as `lcsAPE`) classes; the PE standing for Pseudo-Elements.
- * - Implementing responsive designs with `lcsMediaScreen`, `lcsMediaQuery` or simply `lcsMQ` classes.
- * - Applying direct CSS properties with `lcs[Property]_[value]` classes.
+ * `LCS dySTYLE` allows for extensive styling customization by encoding CSS properties and values directly into class names. This approach simplifies 
+ * applying complex styles, including:
+ * - **Sibling Styling**: Use classes like `lcsAllAfterThis` (same as `lcsAFT`) and `lcsAllBeforeThis` (same as `lcsABT`) for sibling elements.
+ * - **Pseudo-Elements**: Apply pseudo-elements like `:hover`, `:focus`, `::before`, and `::after` using `lcsHover` (`lcsHPE`), `lcsFocus` (`lcsFPE`), 
+ *   `lcsBefore` (`lcsBPE`), and `lcsAfter` (`lcsAPE`).
+ * - **Responsive Designs**: Implement responsive designs with classes like `lcsMediaScreen`, `lcsMediaQuery`, or simply `lcsMQ`.
+ * - **Direct CSS Properties**: Apply specific CSS properties with `lcs[Property]_[value]` classes.
  * 
  * **Getting Started**:
- * To start using `LCS dySTYLE`, add the JS script tag as the first script tag in your head tag.
+ * To begin using `LCS dySTYLE`, add the JS script as the first script in your `<head>` tag.
  * 
- * **Usage** 
- * Define class names following the `lcs` naming convention to dynamically apply styles. The need for 
- * involving lcs in the class name is to differentiate between LCS dySTYLE functionality and your 
- * custom class names; and to also allow LCS dySTYLE system logics run its cause only on class names 
- * in your html elements that begins with lcs.
- * The system will parse these class names and apply the corresponding styles to the elements. 
- * Note that CSS properties in class names should be in camel case of which first letter is in uppercase 
- * (e.g., `MarginTop`, and not `marginTop`), and values should be in lower case all throughout 
- * (e.g., `10px`. This `10PX` will not work). CSS values that are separated using hyphen(-) should 
- * be written without the hyphen(-) (e.g., `borderbox`. This `border-box` will not work). 
- * For media screen classes, the format should be `lcsMQ_MaxWidth600PX_FontSize_14px`, with 
- * underscores separating the MQ, Query definition, property and value, this will generate css rule for 
- * that element like this:
- * '@media screen and (max-width: 600px) {
- *      .lcsMQ_MaxWidth600PX_FontSize_14px {
- *          font-size: 14px;
- *      }
- * }'
+ * **Usage**:
+ * Define class names following the `lcs` naming convention. Including "lcs" in the class name differentiates `LCS dySTYLE` functionality from custom classes 
+ * and ensures that the logic applies only to `lcs` prefixed class names in your HTML.
  * 
- * - Direct implementation: `lcsBackgroundColor_red` would generate css rule :
- * .lcsBackgroundColor_red {
- *     background-color: red;
- * };
+ * - Class names should have CSS properties in camel case with the first letter in uppercase (e.g., `MarginTop` instead of `marginTop`).
+ * - Values should be lowercase throughout (e.g., `10px`; `10PX` will not work).
+ * - Hyphens in values should be omitted (e.g., `borderbox` instead of `border-box`).
  * 
- * - For pseudo-elements: this `lcsBefore_BackgroundColor_red` would generate css rule :
- * .lcsBefore_BackgroundColor_red::before {
- *     background-color: red;
- * }; and this `lcsHPE_BackgroundColor_red` would generate css rule :
- * .lcsHPE_BackgroundColor_red:hover {
- *     background-color: red;
- * } 
+ * **Examples**:
  * 
+ * **Direct Implementation**: 
+ * The class `lcsBackgroundColor_red` will generate the CSS rule:
+ * ```css
+ * .lcsBackgroundColor_red { background-color: red; }
+ * ```
  * 
- * - Advanced and multi definitions:
+ * **Pseudo-Elements**:
+ * - `lcsBefore_BackgroundColor_red` generates:
+ * ```css
+ * .lcsBefore_BackgroundColor_red::before { background-color: red; }
+ * ```
+ * - `lcsHPE_BackgroundColor_red` generates:
+ * ```css
+ * .lcsHPE_BackgroundColor_red:hover { background-color: red; }
+ * ```
  * 
- * `lcsAllOfType_BackgroundColor_red` will generate the rule for all the elements in the DOM of the same tagname.
- * `lcsAllOfTypeWithin_BackgroundColor_red` will generate the rule for every elements of same tagname inside the element.
+ * **Advanced and Multi-Definitions**:
+ * - `lcsAllOfType_BackgroundColor_red` applies to all elements with the same tag name.
+ * - `lcsChild_BackgroundColor_red` applies to an element’s first child.
+ * - `lcsChildrenNotFirst_BackgroundColor_red` applies to all immediate children except the first.
  * 
- * `lcsAllChildLikeThis` will generate the rule for any element (of same tagname) whose parent's tagname is same as that of the referenced element's parent.
- * `lcsChild_BackgroundColor_red` will generate the rule for the element's first child.
- * `lcsChildFirst_BackgroundColor_red` the same as `lcsChild_BackgroundColor_red`.
- * `lcsChild1_BackgroundColor_red` the same as `lcsChild_BackgroundColor_red`.
- * `lcsChild2_BackgroundColor_red` will generate the rule for only the one at number 2 (second immediate child). any number can be used.
- * `lcsChildLast_BackgroundColor_red` will generate the rule for the element's last child`. 
- * `lcsChildren_BackgroundColor_red` will generate the rule for the element's all immediate child.
- * `lcsChildrenNotFirst_BackgroundColor_red` or `lcsChildrenNot1_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the first one.
- * `lcsChildrenNotLast_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the last one.
- * `lcsChildrenNot2_BackgroundColor_red` will generate the rule for the element's all immediate child excluding the one at number 2 (second one). any number can be used.
- * `lcsAllWithin_BackgroundColor_red` will generate the rule for every elements inside the element.
+ * **Of Same Tag Name**:
+ * - `lcsChildOfType_BackgroundColor_red` applies to the element's first child of the same tag name.
+ * - `lcsSiblingOfType2_BackgroundColor_red` applies to the element and its next second sibling of the same tag name.
  * 
- * `lcsSibling_BackgroundColor_red` will generate the rule for the element and its next first sibling.
- * `lcsSibling2_BackgroundColor_red` will generate the rule for the element and only its next second sibling. any number can be used.
- * `lcsSiblings_BackgroundColor_red` will generate the rule for the element and all its siblings. Notice the 's'.
- * Note that using lcsSibling will always include the element itself; also using a number and the element in that number happens to be the same element you used it on, the rule will be style for only that element.
+ * **Multi-Property Styling**:
+ * Multiple properties and values can be defined using one class name instead of separate class names:
+ * ```html
+ * <div class="lcsBackgroundColor.Color_red.green">...</div>
+ * ```
+ * This works with `lcsMQ`, pseudo-elements, and advanced logic. Ensure the number of values matches the number of properties.
  * 
- * - Of same tag name:
- * `lcsChildOfType_BackgroundColor_red` will generate the rule for the element's first child of the same tag name.
- * `lcsChildOfTypeFirst_BackgroundColor_red` the same as `lcsChildOfType_BackgroundColor_red`.
- * `lcsChildOfType1_BackgroundColor_red` the same as `lcsChildOfType_BackgroundColor_red`.
- * `lcsChildOfType2_BackgroundColor_red` will generate the rule for only the child element of same tag at number 2 (second immediate child). any number can be used.
- * `lcsChildOfTypeLast_BackgroundColor_red` will generate the rule for the element's last child of same tagname`. 
- * `lcsChildrenOfType_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname.
- * `lcsChildrenOfTypeNotFirst_BackgroundColor_red` or `lcsChildrenOfTypeNot1_BackgroundColor_red` will generate the rule for the element's all immediate child of same tag name excluding the first one.
- * `lcsChildrenOfTypeNotLast_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname excluding the last one.
- * `lcsChildrenOfTypeNot2_BackgroundColor_red` will generate the rule for the element's all immediate child of same tagname excluding the one at number 2 (second one). any number can be used.
+ * **Complex CSS Values**:
+ * For values requiring multiple inputs (e.g., `border`), use hyphens instead of spaces:
+ * ```css
+ * .lcsBorder_1px-solid-red { border: 1px solid red; }
+ * ```
  * 
- * `lcsSiblingOfType_BackgroundColor_red` will generate the rule for the element and its next first sibling of same tagname.
- * `lcsSiblingOfType2_BackgroundColor_red` will generate the rule for the element and only its next second sibling of same tagname. any number can be used.
- * `lcsSiblingsOfType_BackgroundColor_red` will generate the rule for the element and all its siblings of same tagname. Notice the 's'.
- * Note that using lcsSiblingOfType will always include the element itself; also using a number and the element in that number happens to be the same element you used it on, the rule will be style for only that element.
- *  
+ * **Negative and Float Values**:
+ * Since hyphens are used in multi-input values, use `mn` for negative values:
+ * ```css
+ * .lcsMarginTop_mn4rem { margin-top: -4rem; }
+ * ```
+ * For operators, use `pl` for `+`, `mp` for `*`, `dv` for `/`, and `pct` for `%`.
  * 
- * - Multiple properties and values
- * multiple properties and values can be defined using one class name instead of having separate class name to set property and value:
- * e.g. instead of this `class="lcsBackgroundColor_red lcsColor_green"`, you simplify it using this `class="lcsBackgroundColor.Color_red.green"`.
- * The can also work together with the lcsMQ, the pseudos, and the advanced logics. Also you can define as many properties and values as you like. Just remember to separate properties and values with underscore, and for every 
- * number of value you set must equate/match the properties you set.
+ * **Keyframe Animations**:
+ * For animations, define keyframes directly in class names:
+ * ```html
+ * <div class="lcsAnimation_spin-3s-infinite lcsAnimate_spin_from[Opacity_1]to[Opacity_0]">...</div>
+ * ```
  * 
- * - Complex css values
- * some values for a single property in css requires multiple inputs and 
- * should be separated with spaces and comma, but it becomes dificult using dySTYLE
- * since you can't use spaces to wrap multiple values for a single properties it becomes difficult.
- * However, thanks to hyphen; To settle this is using hyphen in place of spaces. e.g. lcsBorder_1px-solid-red,
- * lcsBoxShadow_1px-0px-15px-#ccc, lcsBoxShadow.Border_1px-0px-15px-#ccc.1px-solid-red
- * 
- * - Negative/Float values & Operators
- * Since we use hyphen (which was supposed to be used to define negative values like) in place of spaces to define multi inputs for a single property,
- * you can use `mn` to define your negative values. e.g. lcsMarginTop_mn4rem; this sets margin-top: -4rem;
- * Similarly, as dySTYLE does not support the use of +, *, /, %, in your classnames, you use `pl` in place of +;
- * `mp` in place of *; `dv` in place of /; and `pct` in place of %, e.g. `lcsFontSize_calc(60px-mn-12px)`.
- * Now, setting values like 0.8rem (or .8rem), .1, will give problems since dots are used to separate multiple properties and values.
- * So to settle this, you have to use a single `0` in place of `.`, which will be `08rem` instead of `0.8rem` or `.8rem`, and 01 instead of `.1` or `0.1`  
- * 
- * - KeyFrame Animations 
- * class="lcsAnimation_name-1s-linear lcsAnimate_name_from[Color.FontSize_red.14px]to[Color.FontSize_green.30px]",
- * class="lcsAnimation_name-1s-linear lcsAnimate_name_0pct[Color.FontSize_red.14px]100pct[Color.FontSize_green.30px]"
- * 
- * We have the logics in place to detect invalid properties and/or values. Also when the numbers of properties defined mismatches the values; often times we 
- * log warning in the console indicating the affected class name provision and the element and the style 
- * won't be applied. (i.e. `lcsBackgroundTop_red` will log warning in the console)
- * 
+ * **Error Handling**:
+ * `LCS dySTYLE` includes logic to detect invalid properties and values. If the properties and values count mismatch, a console warning logs the affected 
+ * class name and element, and the style won’t be applied.
  */
-var aboutDySTYLE;
 
-const allOfTypeSpecsSelection = `All(?:ChildLikeThis|(?:OfType)?(?:Within)?)`; // All, AllOfType, AllOfTypeWithin, AllWithin, AllChildLikeThis
+
+
+
+
+
+
+
+
+
+/**
+ * Regex patterns for various dynamic style application specifications, allowing for
+ * targeted styling based on element type, position, and relationships like siblings and children.
+ * 
+ * - **AllOfTypeSpecsSelection**: Matches "All" type specifications such as:
+ *   - `All`: Applies to all elements.
+ *   - `AllOfType`: Applies to all elements of the same type.
+ *   - `AllOfTypeWithin`: Applies to all elements of the same type within a specified context.
+ *   - `AllWithin`: Applies to all elements within a specified context.
+ *   - `AllChildLikeThis`: Applies to child elements with the same type as the reference element's parent.
+ * 
+ * - **ChildSpecsSelection**: Matches "Child" type specifications, including:
+ *   - `Child`: Applies to the first child.
+ *   - `ChildOfType`: Applies to the first child of a specific type.
+ *   - `ChildFirst`/`ChildLast`: Applies to the first or last child.
+ *   - `Child2`, etc.: Applies to a specific child by position.
+ * 
+ * - **ChildrenSpecsSelection**: Matches "Children" type specifications, covering:
+ *   - `Children`: Applies to all immediate children.
+ *   - `ChildrenOfType`: Applies to all immediate children of a specific type.
+ *   - `ChildrenNotFirst`/`ChildrenNotLast`: Excludes the first or last child.
+ *   - `ChildrenNot2`, etc.: Excludes a specific child by position.
+ * 
+ * - **SiblingSpecsSelection**: Matches "Sibling" type specifications, including:
+ *   - `Sibling`: Applies to the element and its next sibling.
+ *   - `SiblingOfType`: Applies to the element and its next sibling of the same type.
+ *   - `Sibling2`, etc.: Applies to the element and a specific sibling by position.
+ *   - `Siblings`: Applies to all siblings of the element.
+ *   - `SiblingNotFirst`/`SiblingNotLast`: Excludes the first or last sibling.
+ * 
+ * **Combined Pattern (SpecsSelectionPattern)**: 
+ * Combines all patterns above into a single regex pattern to dynamically apply styles based 
+ * on various selection criteria.
+ * 
+ * @type {string}
+ */
+const allOfTypeSpecsSelection = `All(?:ChildLikeThis|(?:OfType)?(?:Within)?)`;
 const childSpecsSelection = `Child(?:OfType(?:First|Last|\\d+)?|First|Last|\\d+)?`;
 const childrenSpecsSelection = `Children(?:OfType(?:Not(?:First|Last|\\d+))?)?`;
 const siblingSpecsSelection = `Sibling(?:s)?(?:Not(?:\\d+|First|Last)|(?:OfType(?:\\d+)?|\\d+))?`;
-
 const specsSelectionPattern = `(?:${allOfTypeSpecsSelection}|${childSpecsSelection}|${childrenSpecsSelection}|${siblingSpecsSelection})`;
+
+
+
+
+
+
+
+
+
+
 
 /**
  * List of valid dySTYLE CSS property names.
