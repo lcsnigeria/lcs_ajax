@@ -5,6 +5,8 @@
 ## Features
 
 - **Dynamic Styling**: Apply CSS styles dynamically with a structured class name syntax, reducing the need for external CSS files.
+- **Multi Styling**: Combine multiple CSS properties and values in a single class name for concise styling.
+- **Shortcut Patterns**: Use shortened syntax for common properties to streamline styling.
 - **Responsive Support**: Embed media queries in class names for responsive designs.
 - **Advanced Selectors**: Style sibling, child, and type-based elements directly through class names.
 - **Pseudo-Classes and Pseudo-Elements**: Use `:hover`, `:focus`, `::before`, and `::after` styles effortlessly.
@@ -40,15 +42,21 @@ Add the `lcs` prefix to your class names to dynamically apply styles. `LCS dySTY
 <!-- Basic style application -->
 <div class="lcsBackgroundColor_red"></div>
 
+<!-- Multi style application -->
+<div class="lcsBackgroundColor.PaddingTop_red.20px">Multi Styling Example</div>
+
+<!-- Shortcut pattern -->
+<div class="lcsBGC_lightblue">Light Blue Background using Shortcut</div>
+
 <!-- Responsive styling -->
-<div class="lcsMQ_MaxWidth600PX_FontSize_14px"></div>
+<div class="lcsMQ_MaxWidth600PX_FontSize_14px">Responsive Font Size</div>
 
 <!-- Pseudo-element styling (COMING SOON) -->
-<div class="lcsBefore_BackgroundColor_red"></div>
+<div class="lcsBefore_BackgroundColor_red">Pseudo-element Example</div>
 
 <!-- Advanced selectors (COMING SOON) -->
 <ul>
-  <li class="lcsSibling_BackgroundColor_lightblue">List Item</li>
+  <li class="lcsSibling_BackgroundColor_lightblue">List Item with Sibling Styling</li>
 </ul>
 ```
 
@@ -77,6 +85,8 @@ lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
 ### Class Name Syntax Details
 
 - **Media Queries**: Prefix classes with `lcsMQ` for responsive styling.
+- **Multi Styling**: Define multiple properties and values in a single class name (e.g., `lcsBackgroundColor.PaddingTop_red.20px`).
+- **Shortcut Patterns**: Use shorthand syntax for frequently used properties, like `lcsBGC_lightblue` for `background-color: lightblue`.
 - **Advanced Selectors**: Use `lcsAllOfType`, `lcsSibling` (COMING SOON), `lcsChild` (COMING SOON), and similar selectors to apply styles to child or sibling elements.
 - **Pseudo-Classes and Pseudo-Elements**: Use `lcsHPE` (COMING SOON) for `:hover`, `lcsBPE` (COMING SOON) for `::before`, and other similar syntax.
 - **Direct Properties**: Apply specific styles using the format `lcs[Property]_[Value]`.
@@ -87,8 +97,11 @@ lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
 <!-- Direct property example -->
 <div class="lcsBackgroundColor_red">Red Background</div>
 
-<!-- Pseudo-element example (COMING SOON) -->
-<div class="lcsBefore_BackgroundColor_blue">Blue Before Element</div>
+<!-- Multi Styling example -->
+<div class="lcsBackgroundColor.Color.Padding_lightblue.white.10px">Multi Styled Element</div>
+
+<!-- Shortcut example -->
+<div class="lcsBGC_lightblue">Light Blue Background</div>
 
 <!-- Media query example -->
 <div class="lcsMQ_MaxWidth768PX_FontSize_12px">Font size 12px on screens 768px wide or smaller</div>

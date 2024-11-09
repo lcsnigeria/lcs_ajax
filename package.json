@@ -1,0 +1,39 @@
+{
+  "name": "lcs_dystyle",
+  "version": "1.0.0",
+  "description": "LCS dySTYLE: A powerful JavaScript library for dynamic, class-based CSS styling. Apply responsive, complex, and custom styles directly through HTML class names, eliminating the need for external CSS files.",
+  "main": "dist/ld.min.js",
+  "module": "src/ld.js",
+  "files": [
+    "dist/ld.min.js"
+  ],
+  "scripts": {
+    "build": "node obf.js && jsdoc -c jsdoc.json",
+    "release": "standard-version && git push --follow-tags && npm publish",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcsnigeria/lcs_dystyle.git"
+  },
+  "keywords": [
+    "css",
+    "dynamic styling",
+    "responsive design",
+    "JavaScript",
+    "class-based styling",
+    "media queries",
+    "pseudo-elements"
+  ],
+  "author": "jcfuniverse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lcsnigeria/lcs_dystyle/issues"
+  },
+  "homepage": "https://github.com/lcsnigeria/lcs_dystyle#readme",
+  "devDependencies": {
+    "javascript-obfuscator": "^4.1.1",
+    "jsdoc": "^4.0.4",
+    "standard-version": "^9.5.0"
+  }
+}
