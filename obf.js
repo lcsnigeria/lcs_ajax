@@ -56,9 +56,9 @@ const obfuscateFile = (filePath, outputFilePath) => {
 const obfuscateDirectory = (inputDir, outputDir) => {
     fs.readdirSync(inputDir).forEach(file => {
         const filePath = path.join(inputDir, file);
-        // If the file is lc.js, set the output to lc.min.js
-        const outputFilePath = file === 'lc.js' 
-            ? path.join(outputDir, 'lc.min.js') 
+        // If the file is ld.js, set the output to ld.min.js
+        const outputFilePath = file === 'ld.js' 
+            ? path.join(outputDir, 'ld.min.js') 
             : path.join(outputDir, file);
 
         // Check if the current path is a directory

@@ -1520,7 +1520,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         const matchedClassData = className.match(dySTYLE_ClassRegex);
 
                         if (matchedClassData) {
-                            console.log(matchedClassData[2]);
                             const mediaQuery = matchedClassData[1];
                             const specsSelection = matchedClassData[2];
                             const pseudoSelection = matchedClassData[3];
