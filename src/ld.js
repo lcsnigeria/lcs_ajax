@@ -1505,7 +1505,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (classNamesArray.length > 0) {
                     // Iterate over each class name of the element
-                    classNamesArray.forEach((className) => {
+                    for (let i = 0; i < classNamesArray.length; i++) {
+                        const className = classNamesArray[i];
 
                         /** 
                          * Regex pattern to match `dySTYLE` class name structure.
@@ -1559,8 +1560,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
 
                         }
-
-                    });
+                    }
                 }
             });
 
