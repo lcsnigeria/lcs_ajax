@@ -23,7 +23,7 @@ npm install lcs_dystyle
 Or clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/lcs_dystyle/lcs_dystyle.git
+git clone https://github.com/lcsnigeria/lcs_dystyle.git
 ```
 
 Then, include the script in your HTML:
