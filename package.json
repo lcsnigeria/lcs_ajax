@@ -36,5 +36,20 @@
     "jest": "^29.7.0",
     "jsdoc": "^4.0.4",
     "standard-version": "^9.5.0"
+  },
+  "standard-version": {
+    "types": [
+      { "type": "feat", "section": "Features" },
+      { "type": "fix", "section": "Bug Fixes" },
+      { "type": "docs", "section": "Documentation" },
+      { "type": "style", "section": "Code Style Changes" },
+      { "type": "refactor", "section": "Refactoring" },
+      { "type": "test", "section": "Tests" },
+      { "type": "chore", "section": "Chores" },
+      { "type": "perf", "section": "Performance Improvements" }
+    ],
+    "commitUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/commit/{{hash}}",
+    "compareUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/compare/{{previousTag}}...{{currentTag}}",
+    "issueUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/issues/{{id}}"
   }
 }

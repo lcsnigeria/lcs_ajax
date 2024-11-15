@@ -49,7 +49,7 @@ Add the `lcs` prefix to your class names to dynamically apply styles. `LCS dySTY
 <div class="lcsBGC_lightblue">Light Blue Background using Shortcut</div>
 
 <!-- Responsive styling -->
-<div class="lcsMQ_MaxWidth600PX_FontSize_14px">Responsive Font Size</div>
+<div class="lcsMQMaxWidth600PX_FontSize_14px">Responsive Font Size</div>
 
 <!-- Pseudo-element styling (COMING SOON) -->
 <div class="lcsBefore_BackgroundColor_red">Pseudo-element Example</div>
@@ -104,7 +104,7 @@ lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
 <div class="lcsBGC_lightblue">Light Blue Background</div>
 
 <!-- Media query example -->
-<div class="lcsMQ_MaxWidth768PX_FontSize_12px">Font size 12px on screens 768px wide or smaller</div>
+<div class="lcsMQMaxWidth768PX_FontSize_12px">Font size 12px on screens 768px wide or smaller</div>
 ```
 
 ## Internal Workings
