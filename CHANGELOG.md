@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.1.0...v1.1.1) (2024-11-15)
+
+
+### Bug Fixes
+
+* adjusted JavaScript obfuscation settings to resolve runtime issues and debugging limitations ([e1436e4](https://github.com/lcsnigeria/lcs_dystyle/commit/e1436e4ce75ab5860f4f1f3398f168a78b81b303))
+
 ## [1.1.0](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.0.5...v1.1.0) (2024-11-15)
 
 
