@@ -772,6 +772,7 @@ const dySTYLE_Values = [...new Set(AllValues)];
 const lengthsPattern = '(?:px|em|rem|cm|mm|in|pt|pct|pc|vh|vw|vmin|vmax|ch|ex|fr)';
 const digitLengthPattern = `\\d+${lengthsPattern}(?:-\\d+${lengthsPattern})*`;
 const digitPattern = `\\d+(?:-\\d+)*`;
+const negativeDigitPattern = `mn\\d+(?:${lengthsPattern})?`;
 const floatPattern = '(?:1|0[0-9]|0)';
 const minmaxPattern = `minmax\\(\\d+${lengthsPattern}-\\d+${lengthsPattern}\\)`;
 const fitcontentPattern = `fitcontent\\(\\d+${lengthsPattern}\\)`;
@@ -784,6 +785,7 @@ const gridTempPattern = `(?:${fitcontentPattern}(?:-\\d+${lengthsPattern})*(?:${
 
 const digitLengthOnlyPattern = `^\\d+${lengthsPattern}(?:-\\d+${lengthsPattern})*$`;
 const digitOnlyPattern = `^\\d+(?:-\\d+)*$`;
+const negativeDigitOnlyPattern = `^${negativeDigitPattern}$`;
 const floatOnlyPattern = '^(?:1|0[0-9]|0)$';
 const calcFuncOnlyPattern = `^${calcFuncPattern}$`;
 const colorFuncOnlyPattern = `^${colorFuncPattern}$`;
@@ -804,7 +806,7 @@ const mediaQueryRegex = /^\s*(?:(?:\(\s*(min|max)-(width|height|resolution)\s*:\
 const propertiesPattern = `(?:[A-Z][a-zA-Z]+)(?:\\.[A-Z][a-zA-Z]+)*`;
 
 // lcsBorderRadius.OverFlow.Width.Height_
-const valuesPattern = `(?:${borderSettingPattern}|${gridTempPattern}|${hexColorPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${textPattern})(?:\\.(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern}))*`;
+const valuesPattern = `(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${negativeDigitPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern})(?:\\.(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern}))*`;
 
 // Pattern to match media query settings
 const mQPattern = `MQ(?:Orientation|(?:Max|Min)(?:Width|Height|Resolution)?)(?:(?:Portrait|Landscape)|\\d+(?:DPI|DPPX|PX))(?:(?:Resolution|(?:Max|Min)(?:Width|Height|Resolution)?)(?:(?:Portrait|Landscape)|\\d+(?:DPI|DPPX|PX)))*`;
@@ -822,8 +824,184 @@ const mQPattern = `MQ(?:Orientation|(?:Max|Min)(?:Width|Height|Resolution)?)(?:(
  * The pattern combines multiple regex patterns to account for the different value types supported by dySTYLE.
  * @type {string}
  */
-const valuesOnlyPattern = `${borderSettingOnlyPattern}|${gridTempOnlyPattern}|${digitLengthOnlyPattern}|${digitOnlyPattern}|${floatOnlyPattern}|${calcFuncOnlyPattern}|${colorFuncOnlyPattern}|${hexColorOnlyPattern}|${textOnlyPattern}`;
+const valuesOnlyPattern = `${borderSettingOnlyPattern}|${gridTempOnlyPattern}|${digitLengthOnlyPattern}|${digitOnlyPattern}|${floatOnlyPattern}|${negativeDigitOnlyPattern}|${calcFuncOnlyPattern}|${colorFuncOnlyPattern}|${hexColorOnlyPattern}|${textOnlyPattern}`;
 
+
+
+
+
+
+
+
+
+
+/**
+ * CSS Rules Bucket to store regular CSS rules.
+ * @type {Array&lt;string>}
+ */
+const dySTYLE_RegularCSSBucket = [];
+
+/**
+ * CSS Rules Bucket to store media query CSS rules.
+ * @type {Array&lt;string>}
+ */
+const dySTYLE_MediaQueryCSSBucket = [];
+
+/**
+ * Internal style element for dySTYLE rules. 
+ * Creates or selects the style element with ID "dySTYLEInternalCSS".
+ * If not present, creates and appends it to the document head.
+ * @type {HTMLStyleElement}
+ */
+let dySTYLE_InternalStyleElement = document.head.querySelector("#dySTYLEInternalCSS");
+if (!dySTYLE_InternalStyleElement) {
+    dySTYLE_InternalStyleElement = document.createElement('style');
+    dySTYLE_InternalStyleElement.id = 'dySTYLEInternalCSS';
+    document.head.appendChild(dySTYLE_InternalStyleElement);
+}
+
+/**
+ * Initializes the LCS dySTYLE system after the DOM content is loaded.
+ * - Checks if `dySTYLE` should be applied to the entire document body.
+ * - If allowed, iterates through each element with class attributes to apply `dySTYLE`.
+ * - Collects and inserts dynamic CSS rules into the document's internal style element.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (document.body) {
+
+        /** 
+         * The body element of the document.
+         * @type {HTMLElement}
+         */
+        const bodyElement = document.querySelector('body');
+
+        /**
+         * Checks if `dySTYLE` is disabled on the body element via the `data-dystyle` attribute.
+         * If set to "false", `dySTYLE` processing is skipped for the entire body.
+         */
+        if (bodyElement.hasAttribute("data-dystyle")) {
+            if (bodyElement.getAttribute("data-dystyle") === "false") {
+                return;
+            }
+        }
+
+        /**
+         * NodeList of all elements within the body that have a class attribute.
+         * @type {NodeListOf&lt;Element>}
+         */
+        const allElementsWithClasses = bodyElement.querySelectorAll('[class]');
+
+        // Iterate over each element with class attributes
+        for (let i = 0; i &lt; allElementsWithClasses.length; i++) {
+            const element = allElementsWithClasses[i];
+
+            /** 
+             * The class names of the current element as a string, or an empty string if `dySTYLE` is disabled on the element.
+             * @type {string}
+             */
+            let elementClassNames = '';
+            if (element.hasAttribute("data-dystyle")) {
+                if (element.getAttribute("data-dystyle") === "false") {
+                    elementClassNames = '';
+                } else {
+                    elementClassNames = element.getAttribute('class');
+                }
+            } else {
+                elementClassNames = element.getAttribute('class');
+            }
+
+            /** 
+             * An array of individual class names for the current element, excluding empty strings.
+             * @type {Array&lt;string>}
+             */
+            const classNamesArray = elementClassNames.split(' ').filter(item => item &amp;&amp; item.toString().trim());
+
+            if (classNamesArray.length > 0) {
+                // Iterate over each class name of the element
+                for (let i = 0; i &lt; classNamesArray.length; i++) {
+                    const className = classNamesArray[i];
+
+                    /** 
+                     * Regex pattern to match `dySTYLE` class name structure.
+                     * - Matches optional media query, optional specs, properties, and values.
+                     */
+                    const dySTYLE_ClassRegex = new RegExp(`^lcs(${mQPattern}_)?(${specsSelectionPattern}_)?((?:APE|BPE|HPE|FPE)_)?(${propertiesPattern})_(${valuesPattern})(_IMPT)?$`);
+
+                    /** 
+                     * Match result for the current class name using the `dySTYLE` regex pattern.
+                     * @type {Array&lt;string>|null}
+                     */
+                    const matchedClassData = className.match(dySTYLE_ClassRegex);
+
+                    if (matchedClassData) {
+                        const mediaQuery = matchedClassData[1];
+                        const specsSelection = matchedClassData[2];
+                        const pseudoSelection = matchedClassData[3];
+                        const properties = matchedClassData[4];
+                        const values = matchedClassData[5];
+                        const strictFlag = matchedClassData[6];
+
+                        /** 
+                         * Creates a new instance of dySTYLE based on the matched class data.
+                         * - The instance contains the element, the matched specs, properties, and the media query.
+                         * @type {dySTYLE}
+                         */
+                        const dySTYLEInstance = new dySTYLE(
+                            element, 
+                            properties, 
+                            values, 
+                            mediaQuery, 
+                            specsSelection, 
+                            pseudoSelection, 
+                            strictFlag
+                        );
+
+                        /**
+                         * Adds the CSS rule to the appropriate CSS bucket (media query or regular CSS),
+                         * if it has not already been included.
+                         */
+                        if (dySTYLEInstance.cssRule.startsWith('@media')) {
+
+                            if (!dySTYLE_MediaQueryCSSBucket.includes(dySTYLEInstance.cssRule)) {
+                                dySTYLE_MediaQueryCSSBucket.push(dySTYLEInstance.cssRule);
+                            }
+                        } else {
+
+                            if (!dySTYLE_RegularCSSBucket.includes(dySTYLEInstance.cssRule)) {
+                                dySTYLE_RegularCSSBucket.push(dySTYLEInstance.cssRule);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+        /**
+         * Inserts the collected CSS rules into the internal style element:
+         * - Adds regular CSS rules first.
+         * - Then adds media query CSS rules.
+         */
+        if (dySTYLE_RegularCSSBucket.length > 0) {
+            for (let i = 0; i &lt; dySTYLE_RegularCSSBucket.length; i++) {
+                const rule = dySTYLE_RegularCSSBucket[i];
+                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+            }
+        }
+
+        if (dySTYLE_MediaQueryCSSBucket.length > 0) {
+            for (let i = 0; i &lt; dySTYLE_MediaQueryCSSBucket.length; i++) {
+                const rule = dySTYLE_MediaQueryCSSBucket[i];
+                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+            }
+        }
+        
+
+    }
+
+});
 
 
 
@@ -1282,7 +1460,7 @@ class dySTYLE {
          * - `digitOnlyPattern`: Matches a pure numeric value without a unit (e.g., `10`, `200`).
          * @type {RegExp}
          */
-        const hexBorderDigitLength_or_LengthOnlyRegex = new RegExp(`${hexColorOnlyPattern}|${borderSettingOnlyPattern}|${digitLengthOnlyPattern}|${digitOnlyPattern}`);
+        const hexBorderDigitLength_or_LengthOnlyRegex = new RegExp(`${hexColorOnlyPattern}|${borderSettingOnlyPattern}|${digitLengthOnlyPattern}|${digitOnlyPattern}|${negativeDigitOnlyPattern}`);
 
         // Test if the value matches one of the patterns in the combined regex (like '100px', '200', '#FFF', or 'solid')
         const isHBDLD = hexBorderDigitLength_or_LengthOnlyRegex.test(styleValue);
@@ -1442,193 +1620,7 @@ class dySTYLE {
     }
         
 
-}
-
-
-
-
-
-
-
-
-
-
-/**
- * CSS Rules Bucket to store regular CSS rules.
- * @type {Array&lt;string>}
- */
-const dySTYLE_RegularCSSBucket = [];
-
-/**
- * CSS Rules Bucket to store media query CSS rules.
- * @type {Array&lt;string>}
- */
-const dySTYLE_MediaQueryCSSBucket = [];
-
-/**
- * Internal style element for dySTYLE rules. 
- * Creates or selects the style element with ID "dySTYLEInternalCSS".
- * If not present, creates and appends it to the document head.
- * @type {HTMLStyleElement}
- */
-let dySTYLE_InternalStyleElement = document.head.querySelector("#dySTYLEInternalCSS");
-if (!dySTYLE_InternalStyleElement) {
-    dySTYLE_InternalStyleElement = document.createElement('style');
-    dySTYLE_InternalStyleElement.id = 'dySTYLEInternalCSS';
-    document.head.appendChild(dySTYLE_InternalStyleElement);
-}
-
-
-
-
-
-
-
-
-
-
-/**
- * Initializes the LCS dySTYLE system after the DOM content is loaded.
- * - Checks if `dySTYLE` should be applied to the entire document body.
- * - If allowed, iterates through each element with class attributes to apply `dySTYLE`.
- * - Collects and inserts dynamic CSS rules into the document's internal style element.
- */
-document.addEventListener("DOMContentLoaded", function () {
-
-    if (document.body) {
-
-        /** 
-         * The body element of the document.
-         * @type {HTMLElement}
-         */
-        const bodyElement = document.querySelector('body');
-
-        /**
-         * Checks if `dySTYLE` is disabled on the body element via the `data-dystyle` attribute.
-         * If set to "false", `dySTYLE` processing is skipped for the entire body.
-         */
-        if (bodyElement.hasAttribute("data-dystyle")) {
-            if (bodyElement.getAttribute("data-dystyle") === "false") {
-                return;
-            }
-        }
-
-        /**
-         * NodeList of all elements within the body that have a class attribute.
-         * @type {NodeListOf&lt;Element>}
-         */
-        const allElementsWithClasses = bodyElement.querySelectorAll('[class]');
-
-        // Iterate over each element with class attributes
-        for (let i = 0; i &lt; allElementsWithClasses.length; i++) {
-            const element = allElementsWithClasses[i];
-
-            /** 
-             * The class names of the current element as a string, or an empty string if `dySTYLE` is disabled on the element.
-             * @type {string}
-             */
-            let elementClassNames = '';
-            if (element.hasAttribute("data-dystyle")) {
-                if (element.getAttribute("data-dystyle") === "false") {
-                    elementClassNames = '';
-                } else {
-                    elementClassNames = element.getAttribute('class');
-                }
-            } else {
-                elementClassNames = element.getAttribute('class');
-            }
-
-            /** 
-             * An array of individual class names for the current element, excluding empty strings.
-             * @type {Array&lt;string>}
-             */
-            const classNamesArray = elementClassNames.split(' ').filter(item => item &amp;&amp; item.toString().trim());
-
-            if (classNamesArray.length > 0) {
-                // Iterate over each class name of the element
-                for (let i = 0; i &lt; classNamesArray.length; i++) {
-                    const className = classNamesArray[i];
-
-                    /** 
-                     * Regex pattern to match `dySTYLE` class name structure.
-                     * - Matches optional media query, optional specs, properties, and values.
-                     */
-                    const dySTYLE_ClassRegex = new RegExp(`^lcs(${mQPattern}_)?(${specsSelectionPattern}_)?((?:APE|BPE|HPE|FPE)_)?(${propertiesPattern})_(${valuesPattern})(_IMPT)?$`);
-
-                    /** 
-                     * Match result for the current class name using the `dySTYLE` regex pattern.
-                     * @type {Array&lt;string>|null}
-                     */
-                    const matchedClassData = className.match(dySTYLE_ClassRegex);
-
-                    if (matchedClassData) {
-                        const mediaQuery = matchedClassData[1];
-                        const specsSelection = matchedClassData[2];
-                        const pseudoSelection = matchedClassData[3];
-                        const properties = matchedClassData[4];
-                        const values = matchedClassData[5];
-                        const strictFlag = matchedClassData[6];
-
-                        /** 
-                         * Creates a new instance of dySTYLE based on the matched class data.
-                         * - The instance contains the element, the matched specs, properties, and the media query.
-                         * @type {dySTYLE}
-                         */
-                        const dySTYLEInstance = new dySTYLE(
-                            element, 
-                            properties, 
-                            values, 
-                            mediaQuery, 
-                            specsSelection, 
-                            pseudoSelection, 
-                            strictFlag
-                        );
-
-                        /**
-                         * Adds the CSS rule to the appropriate CSS bucket (media query or regular CSS),
-                         * if it has not already been included.
-                         */
-                        if (dySTYLEInstance.cssRule.startsWith('@media')) {
-
-                            if (!dySTYLE_MediaQueryCSSBucket.includes(dySTYLEInstance.cssRule)) {
-                                dySTYLE_MediaQueryCSSBucket.push(dySTYLEInstance.cssRule);
-                            }
-                        } else {
-
-                            if (!dySTYLE_RegularCSSBucket.includes(dySTYLEInstance.cssRule)) {
-                                dySTYLE_RegularCSSBucket.push(dySTYLEInstance.cssRule);
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-
-        /**
-         * Inserts the collected CSS rules into the internal style element:
-         * - Adds regular CSS rules first.
-         * - Then adds media query CSS rules.
-         */
-        if (dySTYLE_RegularCSSBucket.length > 0) {
-            for (let i = 0; i &lt; dySTYLE_RegularCSSBucket.length; i++) {
-                const rule = dySTYLE_RegularCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
-            }
-        }
-
-        if (dySTYLE_MediaQueryCSSBucket.length > 0) {
-            for (let i = 0; i &lt; dySTYLE_MediaQueryCSSBucket.length; i++) {
-                const rule = dySTYLE_MediaQueryCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
-            }
-        }
-        
-
-    }
-
-});</code></pre>
+}</code></pre>
         </article>
     </section>
 

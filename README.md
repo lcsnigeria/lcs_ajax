@@ -111,6 +111,44 @@ lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
 
 `LCS dySTYLE` operates only on elements within the `body` tag and dynamically generates and injects CSS rules into the document’s internal style element. The library skips elements with `data-dystyle="false"` attributes, enabling selective styling control.
 
+## Manual Initialization
+
+In addition to automatically applying styles when the DOM content is loaded, `LCS dySTYLE` provides the `lcsRunDyStyleDependency` function for users who want more control over when the `dySTYLE` processing starts. This allows developers to delay or manually trigger the processing of styles to suit specific application needs.
+
+### Purpose
+
+By default, `LCS dySTYLE` processes all elements with matching class names as soon as the DOM content is fully loaded. However, if you want to defer this process or apply styles dynamically after certain events (e.g., loading additional content via AJAX), you can call the `lcsRunDyStyleDependency` function manually.
+
+### Example
+
+```javascript
+// Delayed initialization
+document.addEventListener("DOMContentLoaded", function () {
+    // Perform custom operations before initializing dySTYLE
+    lcsRunDyStyleDependency(); // Manually initialize dySTYLE processing
+});
+
+// Example of using after dynamically adding content
+function addContentAndStyle() {
+    const newDiv = document.createElement('div');
+    newDiv.className = 'lcsBackgroundColor_red';
+    document.body.appendChild(newDiv);
+
+    // Manually re-run dySTYLE to process new content
+    lcsRunDyStyleDependency();
+}
+```
+
+### Use Cases
+
+- **Lazy Loading**: Apply styles only after certain elements are loaded or added to the DOM.
+- **Dynamic Content**: Process styles for elements added dynamically via JavaScript or AJAX.
+- **Selective Initialization**: Defer initialization until specific application events occur.
+
+### Disabling Automatic Initialization
+
+To fully control when `lcsRunDyStyleDependency` is called, you can disable the automatic initialization by removing the `DOMContentLoaded` listener in the library's source code or simply allowing it to execute as-is without affecting manual calls.
+
 ## Development
 
 For contributing, clone the repository and open a pull request with your updates. Contributions, issue reporting, and feature requests are welcome.

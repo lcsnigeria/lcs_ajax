@@ -834,14 +834,28 @@ if (!dySTYLE_InternalStyleElement) {
 
 /**
  * Initializes the LCS dySTYLE system after the DOM content is loaded.
- * - Checks if `dySTYLE` should be applied to the entire document body.
- * - If allowed, iterates through each element with class attributes to apply `dySTYLE`.
- * - Collects and inserts dynamic CSS rules into the document's internal style element.
+ * 
+ * This function waits for the DOM to be fully parsed and then runs 
+ * `lcsRunDyStyleDependency()` to:
+ * - Process elements with class attributes matching dySTYLE patterns.
+ * - Apply dynamic styling rules.
+ * - Insert the collected CSS into the document's internal style element.
  */
 document.addEventListener("DOMContentLoaded", function () {
+    lcsRunDyStyleDependency();
+});
 
+/**
+ * Main function to initialize and process dySTYLE for the document.
+ * 
+ * - Checks if the `dySTYLE` system is enabled for the document body.
+ * - Iterates over all elements with class attributes to match and process 
+ *   `dySTYLE` class patterns.
+ * - Dynamically generates CSS rules and inserts them into the document.
+ */
+function lcsRunDyStyleDependency() {
+    
     if (document.body) {
-
         /** 
          * The body element of the document.
          * @type {HTMLElement}
@@ -849,8 +863,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const bodyElement = document.querySelector('body');
 
         /**
-         * Checks if `dySTYLE` is disabled on the body element via the `data-dystyle` attribute.
-         * If set to "false", `dySTYLE` processing is skipped for the entire body.
+         * Checks if the `dySTYLE` system is disabled for the body via the `data-dystyle` attribute.
+         * If the attribute value is "false", the function exits without processing.
          */
         if (bodyElement.hasAttribute("data-dystyle")) {
             if (bodyElement.getAttribute("data-dystyle") === "false") {
@@ -859,49 +873,43 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         /**
-         * NodeList of all elements within the body that have a class attribute.
+         * NodeList of all elements with class attributes in the body.
          * @type {NodeListOf<Element>}
          */
         const allElementsWithClasses = bodyElement.querySelectorAll('[class]');
 
-        // Iterate over each element with class attributes
+        // Process each element with class attributes
         for (let i = 0; i < allElementsWithClasses.length; i++) {
             const element = allElementsWithClasses[i];
 
-            /** 
-             * The class names of the current element as a string, or an empty string if `dySTYLE` is disabled on the element.
+            /**
+             * Class names of the current element.
              * @type {string}
              */
-            let elementClassNames = '';
-            if (element.hasAttribute("data-dystyle")) {
-                if (element.getAttribute("data-dystyle") === "false") {
-                    elementClassNames = '';
-                } else {
-                    elementClassNames = element.getAttribute('class');
-                }
-            } else {
-                elementClassNames = element.getAttribute('class');
-            }
+            let elementClassNames = element.hasAttribute("data-dystyle") &&
+                element.getAttribute("data-dystyle") === "false"
+                ? ''
+                : element.getAttribute('class') || '';
 
-            /** 
-             * An array of individual class names for the current element, excluding empty strings.
+            /**
+             * Array of individual class names for the element.
+             * Empty strings are filtered out.
              * @type {Array<string>}
              */
-            const classNamesArray = elementClassNames.split(' ').filter(item => item && item.toString().trim());
+            const classNamesArray = elementClassNames.split(' ').filter(item => item.trim());
 
             if (classNamesArray.length > 0) {
-                // Iterate over each class name of the element
                 for (let i = 0; i < classNamesArray.length; i++) {
                     const className = classNamesArray[i];
 
-                    /** 
+                    /**
                      * Regex pattern to match `dySTYLE` class name structure.
-                     * - Matches optional media query, optional specs, properties, and values.
+                     * Matches optional media queries, pseudo-elements, properties, and values.
                      */
                     const dySTYLE_ClassRegex = new RegExp(`^lcs(${mQPattern}_)?(${specsSelectionPattern}_)?((?:APE|BPE|HPE|FPE)_)?(${propertiesPattern})_(${valuesPattern})(_IMPT)?$`);
 
-                    /** 
-                     * Match result for the current class name using the `dySTYLE` regex pattern.
+                    /**
+                     * Match result for the current class name.
                      * @type {Array<string>|null}
                      */
                     const matchedClassData = className.match(dySTYLE_ClassRegex);
@@ -914,9 +922,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         const values = matchedClassData[5];
                         const strictFlag = matchedClassData[6];
 
-                        /** 
-                         * Creates a new instance of dySTYLE based on the matched class data.
-                         * - The instance contains the element, the matched specs, properties, and the media query.
+                        /**
+                         * dySTYLE instance for the matched class data.
+                         * Processes and generates CSS rules dynamically.
                          * @type {dySTYLE}
                          */
                         const dySTYLEInstance = new dySTYLE(
@@ -930,31 +938,28 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
                         /**
-                         * Adds the CSS rule to the appropriate CSS bucket (media query or regular CSS),
-                         * if it has not already been included.
+                         * Adds generated CSS rules to the appropriate CSS bucket:
+                         * - Media query rules go into `dySTYLE_MediaQueryCSSBucket`.
+                         * - Regular CSS rules go into `dySTYLE_RegularCSSBucket`.
                          */
                         if (dySTYLEInstance.cssRule.startsWith('@media')) {
-
                             if (!dySTYLE_MediaQueryCSSBucket.includes(dySTYLEInstance.cssRule)) {
                                 dySTYLE_MediaQueryCSSBucket.push(dySTYLEInstance.cssRule);
                             }
                         } else {
-
                             if (!dySTYLE_RegularCSSBucket.includes(dySTYLEInstance.cssRule)) {
                                 dySTYLE_RegularCSSBucket.push(dySTYLEInstance.cssRule);
                             }
                         }
-
                     }
                 }
             }
         }
 
-
         /**
          * Inserts the collected CSS rules into the internal style element:
-         * - Adds regular CSS rules first.
-         * - Then adds media query CSS rules.
+         * - Regular CSS rules are added first.
+         * - Media query CSS rules are added afterward.
          */
         if (dySTYLE_RegularCSSBucket.length > 0) {
             for (let i = 0; i < dySTYLE_RegularCSSBucket.length; i++) {
@@ -969,12 +974,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
             }
         }
-        
-
     }
-
-});
-
+}
 
 
 
