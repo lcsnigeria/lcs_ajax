@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.1.1...v1.2.0) (2024-11-15)
+
+
+### Features
+
+* add lcsRunDyStyleDependency function to initialize dySTYLE system and improve documentation ([dc2de97](https://github.com/lcsnigeria/lcs_dystyle/commit/dc2de97ad29de25e421d34fc9f6f9f0cef9f1cdc))
+
 ### [1.1.1](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.1.0...v1.1.1) (2024-11-15)
 
 
