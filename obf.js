@@ -21,18 +21,16 @@ fs.mkdirSync(outputDirectory, { recursive: true });
 
 // Obfuscation options
 const obfuscationOptions = {
-    compact: true,
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.75,
-    deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.4,
-    stringArrayEncoding: ['rc4'],
-    stringArrayThreshold: 0.8,
+    compact: true, // Keeps the code compact
+    controlFlowFlattening: false, // Disable control flow flattening for better performance
+    deadCodeInjection: false, // Avoid adding unnecessary junk code
+    stringArrayEncoding: ['base64'], // Use simpler encoding for strings
+    stringArrayThreshold: 0.75, // Slightly reduce string obfuscation
     splitStrings: true,
     splitStringsChunkLength: 3,
-    renameGlobals: true,
-    selfDefending: true,
-    disableConsoleOutput: true
+    selfDefending: false, // Disable self-defending for compatibility
+    disableConsoleOutput: false, // Allow console.log for debugging
+    renameGlobals: false // Avoid renaming globals to prevent conflicts
 };
 
 // Obfuscate ld.js and output to ld.min.js
