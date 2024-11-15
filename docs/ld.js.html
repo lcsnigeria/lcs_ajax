@@ -804,7 +804,7 @@ const mediaQueryRegex = /^\s*(?:(?:\(\s*(min|max)-(width|height|resolution)\s*:\
 const propertiesPattern = `(?:[A-Z][a-zA-Z]+)(?:\\.[A-Z][a-zA-Z]+)*`;
 
 // lcsBorderRadius.OverFlow.Width.Height_
-const valuesPattern = `(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern})(?:\\.(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern}))*`;
+const valuesPattern = `(?:${borderSettingPattern}|${gridTempPattern}|${hexColorPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${textPattern})(?:\\.(?:${borderSettingPattern}|${gridTempPattern}|${digitLengthPattern}|${digitPattern}|${floatPattern}|${calcFuncPattern}|${colorFuncPattern}|${hexColorPattern}|${textPattern}))*`;
 
 // Pattern to match media query settings
 const mQPattern = `MQ(?:Orientation|(?:Max|Min)(?:Width|Height|Resolution)?)(?:(?:Portrait|Landscape)|\\d+(?:DPI|DPPX|PX))(?:(?:Resolution|(?:Max|Min)(?:Width|Height|Resolution)?)(?:(?:Portrait|Landscape)|\\d+(?:DPI|DPPX|PX)))*`;
@@ -908,9 +908,12 @@ class dySTYLE {
         // Validate properties
         const propMatch = this.#matchRegex(this.#givenProperties, 'properties'); // Create regex match for properties.
         if (propMatch.regexMatched) {
-            propMatch.regexMatches.forEach((pm) => {
+            let propMatchCount = 0;
+            while (propMatchCount &lt; propMatch.regexMatches.length) {
+                const pm = propMatch.regexMatches[propMatchCount];
                 this.#validateCSSProperty(pm); // Validate each property.
-            });
+                propMatchCount++;
+            }
         } else {
             throw new Error("Error setting CSS rules: Invalid property detected! : " + this.regexMismatches);
         }
@@ -918,9 +921,12 @@ class dySTYLE {
         // Validate values
         const valMatch = this.#matchRegex(this.#givenValues, 'values'); // Create regex match for values.
         if (valMatch.regexMatched) {
-            valMatch.regexMatches.forEach((vm) => {
+            let valMatchCount = 0;
+            while (valMatchCount &lt; valMatch.regexMatches.length) {
+                const vm = valMatch.regexMatches[valMatchCount];
                 this.#validateCSSValue(vm); // Validate each value.
-            });
+                valMatchCount++;
+            }
         } else {
             console.warn("Invalid value detected! : " + valMatch.regexMismatches);
         }
@@ -1067,8 +1073,9 @@ class dySTYLE {
     
             const mqMatches = this.#givenMediaQueryRule.match(/(Orientation|MaxWidth|MaxHeight|MinWidth|MinHeight|MinResolution|MaxResolution)(Portrait|Landscape|\d+(?:DPPX|DPI|PX))((Orientation|MaxWidth|MaxHeight|MinWidth|MinHeight|MinResolution|MaxResolution)(Portrait|Landscape|\d+(?:DPPX|DPI|PX)))*/);
             if (mqMatches &amp;&amp; mqMatches.length > 2) {
-                mqMatches.forEach((mq) => {
-    
+                for (let i = 0; i &lt; mqMatches.length; i++) {
+                    const mq = mqMatches[i];
+
                     if (mq) {
                         // Convert the query rule to lowercase for case-insensitive operation
                         const lc_MediaQueryRule = mq.toLowerCase();
@@ -1081,9 +1088,10 @@ class dySTYLE {
                             // Validate the mqs lengths
                             const mqsL_Matches = mqs_Result.match(/(dpi|dppx|px)+/g);
                             if (mqsL_Matches &amp;&amp; mqsL_Matches.length > 0) {
-                                mqsL_Matches.forEach((m) => {
+                                for (let i = 0; i &lt; mqsL_Matches.length; i++) {
+                                    const m = mqsL_Matches[i];
                                     mqs_Result = mqs_Result.replace(/(dpi|dppx|px)+/g, `${m}) `);
-                                });
+                                }
                             }
     
                             // Cleanup extra closing brackets
@@ -1094,8 +1102,7 @@ class dySTYLE {
     
                         }
                     }
-                    
-                });
+                }
             }
     
             // if this is now a valid media query, prepend the media query call
@@ -1175,14 +1182,16 @@ class dySTYLE {
 
             // Handle single-direction shorthand combinations
             if (propSHDirections &amp;&amp; propSHDirections.length > 1) {
-                propSHDirections.forEach((dir) => {
+                for (let i = 0; i &lt; propSHDirections.length; i++) {
+                    const dir = propSHDirections[i];
                     if (propSHMap[dir]) {
                         this.#validatedProperties.push(`${propSHLeader}-${propSHMap[dir]}`); // Add validated properties to the array.
                     } else {
                         this.#inValidatedProperties.push(styleProperty);
                     }
-                });
-            } 
+                }
+            }
+
             // Handle Y and X shorthand combinations
             else if (propSHDouble === 'Y') {
                 this.#validatedProperties.push(`${propSHLeader}-top`);
@@ -1287,12 +1296,13 @@ class dySTYLE {
             if (matchedOperators &amp;&amp; matchedOperators.length > 0) {
 
                 // Replace dySTYLE operators with their mapped equivalents (e.g., 'pl' -> '+')
-                matchedOperators.forEach((mo) => {
+                for (let i = 0; i &lt; matchedOperators.length; i++) {
+                    const mo = matchedOperators[i];
                     if (operatorMap[mo]) {
                         const moRGX = new RegExp(mo, 'g');
                         this.#validatedValues.push(styleValue.replace(moRGX, operatorMap[mo]));
                     }
-                });
+                }
             }
 
         } else if (isHBDLD) {
@@ -1303,15 +1313,18 @@ class dySTYLE {
             }
 
             // If has float: 0[0-9]; validate with decimal point
-            if (/\b0[0-9]{1}/.test(styleValue)) {
+            if (/^#[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?([0-9A-Fa-f]{2})?$/.test(styleValue)) {
+                styleValue = styleValue;
+            } else if (/\b0[0-9]{1}/.test(styleValue)) {
                 const allDecimalNum = styleValue.match(/\b0[0-9]{1}/g);
                 if (allDecimalNum &amp;&amp; allDecimalNum.length > 0) {
-                    allDecimalNum.forEach((adn) => {
+                    for (let i = 0; i &lt; allDecimalNum.length; i++) {
+                        const adn = allDecimalNum[i];
                         const numAfterDecimal = adn.match(/\d/g)[1];
                         if (!isNaN(Number(numAfterDecimal))) {
                             styleValue = styleValue.replace(adn, '0.' + numAfterDecimal);
                         }
-                    });
+                    }
                 }
             }
 
@@ -1319,14 +1332,13 @@ class dySTYLE {
             const matchedOperators = styleValue.match(/(mn|pct)/g);
             if (matchedOperators &amp;&amp; matchedOperators.length > 0) {
                 // Replace operators with their corresponding symbols
-                matchedOperators.forEach((mo) => {
-
+                for (let i = 0; i &lt; matchedOperators.length; i++) {
+                    const mo = matchedOperators[i];
                     if (operatorMap[mo]) {
                         const moRGX = new RegExp(mo, 'g');
                         this.#validatedValues.push(styleValue.replace(moRGX, operatorMap[mo]));
                     }
-
-                });
+                }
             } else {
                 
                 // If no operators, simply push the style value as is
@@ -1393,26 +1405,28 @@ class dySTYLE {
         if (purpose === 'properties') {
             
             // Use the properties pattern to test each property in the split array
-            regexSplitMatches.forEach(property => {
+            for (let i = 0; i &lt; regexSplitMatches.length; i++) {
+                const property = regexSplitMatches[i];
                 const propertiesRegex = new RegExp(propertiesPattern, 'g'); 
                 if (propertiesRegex.test(property)) {
                     regexMatches.push(property); // Collect matched properties
                 } else {
                     regexMismatches.push(property); // Collect mismatched properties
                 }
-            });
+            }
 
         } else if (purpose === 'values') {
             
             // Use the values pattern to test each value in the split array
-            regexSplitMatches.forEach(value => {
+            for (let i = 0; i &lt; regexSplitMatches.length; i++) {
+                const value = regexSplitMatches[i];
                 const valuesRegex = new RegExp(valuesOnlyPattern, 'g');
                 if (valuesRegex.test(value)) {
                     regexMatches.push(value); // Collect matched values
                 } else {
                     regexMismatches.push(value); // Collect mismatched values
                 }
-            });
+            }
         }
 
         // Determine if all segments matched by checking if there are no mismatches
@@ -1505,111 +1519,112 @@ document.addEventListener("DOMContentLoaded", function () {
          */
         const allElementsWithClasses = bodyElement.querySelectorAll('[class]');
 
-        if (allElementsWithClasses.length > 0) {
+        // Iterate over each element with class attributes
+        for (let i = 0; i &lt; allElementsWithClasses.length; i++) {
+            const element = allElementsWithClasses[i];
 
-            // Iterate over each element with class attributes
-            allElementsWithClasses.forEach((element) => {
-
-                /** 
-                 * The class names of the current element as a string, or an empty string if `dySTYLE` is disabled on the element.
-                 * @type {string}
-                 */
-                let elementClassNames = '';
-                if (element.hasAttribute("data-dystyle")) {
-                    if (element.getAttribute("data-dystyle") === "false") {
-                        elementClassNames = '';
-                    } else {
-                        elementClassNames = element.getAttribute('class');
-                    }
+            /** 
+             * The class names of the current element as a string, or an empty string if `dySTYLE` is disabled on the element.
+             * @type {string}
+             */
+            let elementClassNames = '';
+            if (element.hasAttribute("data-dystyle")) {
+                if (element.getAttribute("data-dystyle") === "false") {
+                    elementClassNames = '';
                 } else {
                     elementClassNames = element.getAttribute('class');
                 }
+            } else {
+                elementClassNames = element.getAttribute('class');
+            }
 
-                /** 
-                 * An array of individual class names for the current element, excluding empty strings.
-                 * @type {Array&lt;string>}
-                 */
-                const classNamesArray = elementClassNames.split(' ').filter(item => item &amp;&amp; item.toString().trim());
+            /** 
+             * An array of individual class names for the current element, excluding empty strings.
+             * @type {Array&lt;string>}
+             */
+            const classNamesArray = elementClassNames.split(' ').filter(item => item &amp;&amp; item.toString().trim());
 
-                if (classNamesArray.length > 0) {
-                    // Iterate over each class name of the element
-                    for (let i = 0; i &lt; classNamesArray.length; i++) {
-                        const className = classNamesArray[i];
+            if (classNamesArray.length > 0) {
+                // Iterate over each class name of the element
+                for (let i = 0; i &lt; classNamesArray.length; i++) {
+                    const className = classNamesArray[i];
+
+                    /** 
+                     * Regex pattern to match `dySTYLE` class name structure.
+                     * - Matches optional media query, optional specs, properties, and values.
+                     */
+                    const dySTYLE_ClassRegex = new RegExp(`^lcs(${mQPattern}_)?(${specsSelectionPattern}_)?((?:APE|BPE|HPE|FPE)_)?(${propertiesPattern})_(${valuesPattern})(_IMPT)?$`);
+
+                    /** 
+                     * Match result for the current class name using the `dySTYLE` regex pattern.
+                     * @type {Array&lt;string>|null}
+                     */
+                    const matchedClassData = className.match(dySTYLE_ClassRegex);
+
+                    if (matchedClassData) {
+                        const mediaQuery = matchedClassData[1];
+                        const specsSelection = matchedClassData[2];
+                        const pseudoSelection = matchedClassData[3];
+                        const properties = matchedClassData[4];
+                        const values = matchedClassData[5];
+                        const strictFlag = matchedClassData[6];
 
                         /** 
-                         * Regex pattern to match `dySTYLE` class name structure.
-                         * - Matches optional media query, optional specs, properties, and values.
+                         * Creates a new instance of dySTYLE based on the matched class data.
+                         * - The instance contains the element, the matched specs, properties, and the media query.
+                         * @type {dySTYLE}
                          */
-                        const dySTYLE_ClassRegex = new RegExp(`^lcs(${mQPattern}_)?(${specsSelectionPattern}_)?((?:APE|BPE|HPE|FPE)_)?(${propertiesPattern})_(${valuesPattern})(_IMPT)?$`);
+                        const dySTYLEInstance = new dySTYLE(
+                            element, 
+                            properties, 
+                            values, 
+                            mediaQuery, 
+                            specsSelection, 
+                            pseudoSelection, 
+                            strictFlag
+                        );
 
-                        /** 
-                         * Match result for the current class name using the `dySTYLE` regex pattern.
-                         * @type {Array&lt;string>|null}
+                        /**
+                         * Adds the CSS rule to the appropriate CSS bucket (media query or regular CSS),
+                         * if it has not already been included.
                          */
-                        const matchedClassData = className.match(dySTYLE_ClassRegex);
+                        if (dySTYLEInstance.cssRule.startsWith('@media')) {
 
-                        if (matchedClassData) {
-                            const mediaQuery = matchedClassData[1];
-                            const specsSelection = matchedClassData[2];
-                            const pseudoSelection = matchedClassData[3];
-                            const properties = matchedClassData[4];
-                            const values = matchedClassData[5];
-                            const strictFlag = matchedClassData[6];
-
-                            /** 
-                             * Creates a new instance of dySTYLE based on the matched class data.
-                             * - The instance contains the element, the matched specs, properties, and the media query.
-                             * @type {dySTYLE}
-                             */
-                            const dySTYLEInstance = new dySTYLE(
-                                element, 
-                                properties, 
-                                values, 
-                                mediaQuery, 
-                                specsSelection, 
-                                pseudoSelection, 
-                                strictFlag
-                            );
-
-                            /**
-                             * Adds the CSS rule to the appropriate CSS bucket (media query or regular CSS),
-                             * if it has not already been included.
-                             */
-                            if (dySTYLEInstance.cssRule.startsWith('@media')) {
-
-                                if (!dySTYLE_MediaQueryCSSBucket.includes(dySTYLEInstance.cssRule)) {
-                                    dySTYLE_MediaQueryCSSBucket.push(dySTYLEInstance.cssRule);
-                                }
-                            } else {
-
-                                if (!dySTYLE_RegularCSSBucket.includes(dySTYLEInstance.cssRule)) {
-                                    dySTYLE_RegularCSSBucket.push(dySTYLEInstance.cssRule);
-                                }
+                            if (!dySTYLE_MediaQueryCSSBucket.includes(dySTYLEInstance.cssRule)) {
+                                dySTYLE_MediaQueryCSSBucket.push(dySTYLEInstance.cssRule);
                             }
+                        } else {
 
+                            if (!dySTYLE_RegularCSSBucket.includes(dySTYLEInstance.cssRule)) {
+                                dySTYLE_RegularCSSBucket.push(dySTYLEInstance.cssRule);
+                            }
                         }
+
                     }
                 }
-            });
-
-            /**
-             * Inserts the collected CSS rules into the internal style element:
-             * - Adds regular CSS rules first.
-             * - Then adds media query CSS rules.
-             */
-            if (dySTYLE_RegularCSSBucket.length > 0) {
-                dySTYLE_RegularCSSBucket.forEach((rule) => {
-                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
-                });
             }
-
-            if (dySTYLE_MediaQueryCSSBucket.length > 0) {
-                dySTYLE_MediaQueryCSSBucket.forEach((rule) => {
-                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
-                });
-            }
-
         }
+
+
+        /**
+         * Inserts the collected CSS rules into the internal style element:
+         * - Adds regular CSS rules first.
+         * - Then adds media query CSS rules.
+         */
+        if (dySTYLE_RegularCSSBucket.length > 0) {
+            for (let i = 0; i &lt; dySTYLE_RegularCSSBucket.length; i++) {
+                const rule = dySTYLE_RegularCSSBucket[i];
+                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+            }
+        }
+
+        if (dySTYLE_MediaQueryCSSBucket.length > 0) {
+            for (let i = 0; i &lt; dySTYLE_MediaQueryCSSBucket.length; i++) {
+                const rule = dySTYLE_MediaQueryCSSBucket[i];
+                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+            }
+        }
+        
 
     }
 
