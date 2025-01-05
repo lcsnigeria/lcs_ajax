@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dySTYLE Test Page</title>
-  <script src="https://cdn.jsdelivr.net/npm/lcs_dystyle@1.1.0/dist/ld.min.js"></script>  <!-- Link to the dySTYLE library -->
-  <!-- <script src="src/ld.js"></script>  -->
+  <!-- Link to the dySTYLE library -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lcs_dystyle@1.1.0/dist/ld.min.js"></script> -->
+  <script src="src/ld.js"></script>
   <style>
     /* Add any additional static styles here */
     body {
@@ -90,6 +91,12 @@
       Animated Element: Spin effect (if supported in dySTYLE)
     </div>
   </section> -->
+
+  <script>
+    setInterval(() => {
+      lcsRunDyStyle();
+    }, 5000);
+  </script>
 
 </body>
 </html>

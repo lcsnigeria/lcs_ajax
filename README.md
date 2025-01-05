@@ -113,11 +113,11 @@ lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
 
 ## Manual Initialization
 
-In addition to automatically applying styles when the DOM content is loaded, `LCS dySTYLE` provides the `lcsRunDyStyleDependency` function for users who want more control over when the `dySTYLE` processing starts. This allows developers to delay or manually trigger the processing of styles to suit specific application needs.
+In addition to automatically applying styles when the DOM content is loaded, `LCS dySTYLE` provides the `lcsRunDyStyle` function for users who want more control over when the `dySTYLE` processing starts. This allows developers to delay or manually trigger the processing of styles to suit specific application needs.
 
 ### Purpose
 
-By default, `LCS dySTYLE` processes all elements with matching class names as soon as the DOM content is fully loaded. However, if you want to defer this process or apply styles dynamically after certain events (e.g., loading additional content via AJAX), you can call the `lcsRunDyStyleDependency` function manually.
+By default, `LCS dySTYLE` processes all elements with matching class names as soon as the DOM content is fully loaded. However, if you want to defer this process or apply styles dynamically after certain events (e.g., loading additional content via AJAX), you can call the `lcsRunDyStyle` function manually.
 
 ### Example
 
@@ -125,7 +125,7 @@ By default, `LCS dySTYLE` processes all elements with matching class names as so
 // Delayed initialization
 document.addEventListener("DOMContentLoaded", function () {
     // Perform custom operations before initializing dySTYLE
-    lcsRunDyStyleDependency(); // Manually initialize dySTYLE processing
+    lcsRunDyStyle(); // Manually initialize dySTYLE processing
 });
 
 // Example of using after dynamically adding content
@@ -135,7 +135,7 @@ function addContentAndStyle() {
     document.body.appendChild(newDiv);
 
     // Manually re-run dySTYLE to process new content
-    lcsRunDyStyleDependency();
+    lcsRunDyStyle();
 }
 ```
 
@@ -147,7 +147,7 @@ function addContentAndStyle() {
 
 ### Disabling Automatic Initialization
 
-To fully control when `lcsRunDyStyleDependency` is called, you can disable the automatic initialization by removing the `DOMContentLoaded` listener in the library's source code or simply allowing it to execute as-is without affecting manual calls.
+To fully control when `lcsRunDyStyle` is called, you can disable the automatic initialization by removing the `DOMContentLoaded` listener in the library's source code or simply allowing it to execute as-is without affecting manual calls.
 
 ## Development
 

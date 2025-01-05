@@ -836,14 +836,29 @@ if (!dySTYLE_InternalStyleElement) {
  * Initializes the LCS dySTYLE system after the DOM content is loaded.
  * 
  * This function waits for the DOM to be fully parsed and then runs 
- * `lcsRunDyStyleDependency()` to:
+ * `lcsRunDyStyle()` to:
  * - Process elements with class attributes matching dySTYLE patterns.
  * - Apply dynamic styling rules.
  * - Insert the collected CSS into the document's internal style element.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    lcsRunDyStyleDependency();
+    lcsRunDyStyle();
 });
+
+
+
+/**
+ * Normalizes a CSS rule by removing extra spaces and ensuring consistent formatting.
+ *
+ * @param {string} rule - The CSS rule to normalize.
+ * @returns {string} - The normalized CSS rule.
+ */
+function lcsNormalizeDyStyleCSSRule(rule) {
+    return rule
+        .replace(/\s+/g, ' ') // Replace multiple spaces/newlines with a single space
+        .replace(/;\s*/g, ';') // Ensure semicolons are followed by no extra space
+        .trim(); // Remove trailing and leading spaces
+}
 
 /**
  * Main function to initialize and process dySTYLE for the document.
@@ -853,7 +868,7 @@ document.addEventListener("DOMContentLoaded", function () {
  *   `dySTYLE` class patterns.
  * - Dynamically generates CSS rules and inserts them into the document.
  */
-function lcsRunDyStyleDependency() {
+function lcsRunDyStyle() {
     
     if (document.body) {
         /** 
@@ -961,19 +976,37 @@ function lcsRunDyStyleDependency() {
          * - Regular CSS rules are added first.
          * - Media query CSS rules are added afterward.
          */
+
+        // Insert Regular CSS Rules
         if (dySTYLE_RegularCSSBucket.length > 0) {
             for (let i = 0; i < dySTYLE_RegularCSSBucket.length; i++) {
                 const rule = dySTYLE_RegularCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                const styleContent = dySTYLE_InternalStyleElement.textContent || dySTYLE_InternalStyleElement.innerText;
+                const ruleNormalized = lcsNormalizeDyStyleCSSRule(rule);
+                const styleContentNormalized = lcsNormalizeDyStyleCSSRule(styleContent);
+
+                if (!styleContentNormalized.includes(ruleNormalized)) {
+                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                }
             }
         }
 
+        // Insert Media Query CSS Rules
         if (dySTYLE_MediaQueryCSSBucket.length > 0) {
             for (let i = 0; i < dySTYLE_MediaQueryCSSBucket.length; i++) {
                 const rule = dySTYLE_MediaQueryCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                const styleContent = dySTYLE_InternalStyleElement.textContent || dySTYLE_InternalStyleElement.innerText;
+                const ruleNormalized = lcsNormalizeDyStyleCSSRule(rule);
+                const styleContentNormalized = lcsNormalizeDyStyleCSSRule(styleContent);
+
+                if (!styleContentNormalized.includes(ruleNormalized)) {
+                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                }
             }
         }
+
+
+
     }
 }
 
