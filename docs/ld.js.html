@@ -864,14 +864,29 @@ if (!dySTYLE_InternalStyleElement) {
  * Initializes the LCS dySTYLE system after the DOM content is loaded.
  * 
  * This function waits for the DOM to be fully parsed and then runs 
- * `lcsRunDyStyleDependency()` to:
+ * `lcsRunDyStyle()` to:
  * - Process elements with class attributes matching dySTYLE patterns.
  * - Apply dynamic styling rules.
  * - Insert the collected CSS into the document's internal style element.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    lcsRunDyStyleDependency();
+    lcsRunDyStyle();
 });
+
+
+
+/**
+ * Normalizes a CSS rule by removing extra spaces and ensuring consistent formatting.
+ *
+ * @param {string} rule - The CSS rule to normalize.
+ * @returns {string} - The normalized CSS rule.
+ */
+function lcsNormalizeDyStyleCSSRule(rule) {
+    return rule
+        .replace(/\s+/g, ' ') // Replace multiple spaces/newlines with a single space
+        .replace(/;\s*/g, ';') // Ensure semicolons are followed by no extra space
+        .trim(); // Remove trailing and leading spaces
+}
 
 /**
  * Main function to initialize and process dySTYLE for the document.
@@ -881,7 +896,7 @@ document.addEventListener("DOMContentLoaded", function () {
  *   `dySTYLE` class patterns.
  * - Dynamically generates CSS rules and inserts them into the document.
  */
-function lcsRunDyStyleDependency() {
+function lcsRunDyStyle() {
     
     if (document.body) {
         /** 
@@ -989,19 +1004,37 @@ function lcsRunDyStyleDependency() {
          * - Regular CSS rules are added first.
          * - Media query CSS rules are added afterward.
          */
+
+        // Insert Regular CSS Rules
         if (dySTYLE_RegularCSSBucket.length > 0) {
             for (let i = 0; i &lt; dySTYLE_RegularCSSBucket.length; i++) {
                 const rule = dySTYLE_RegularCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                const styleContent = dySTYLE_InternalStyleElement.textContent || dySTYLE_InternalStyleElement.innerText;
+                const ruleNormalized = lcsNormalizeDyStyleCSSRule(rule);
+                const styleContentNormalized = lcsNormalizeDyStyleCSSRule(styleContent);
+
+                if (!styleContentNormalized.includes(ruleNormalized)) {
+                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                }
             }
         }
 
+        // Insert Media Query CSS Rules
         if (dySTYLE_MediaQueryCSSBucket.length > 0) {
             for (let i = 0; i &lt; dySTYLE_MediaQueryCSSBucket.length; i++) {
                 const rule = dySTYLE_MediaQueryCSSBucket[i];
-                dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                const styleContent = dySTYLE_InternalStyleElement.textContent || dySTYLE_InternalStyleElement.innerText;
+                const ruleNormalized = lcsNormalizeDyStyleCSSRule(rule);
+                const styleContentNormalized = lcsNormalizeDyStyleCSSRule(styleContent);
+
+                if (!styleContentNormalized.includes(ruleNormalized)) {
+                    dySTYLE_InternalStyleElement.insertAdjacentText("beforeend", rule);
+                }
             }
         }
+
+
+
     }
 }
 
@@ -1631,7 +1664,7 @@ class dySTYLE {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="dySTYLE.html">dySTYLE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AllValues">AllValues</a></li><li><a href="global.html#allOfTypeSpecsSelection">allOfTypeSpecsSelection</a></li><li><a href="global.html#dySTYLE_BorderStyleValues">dySTYLE_BorderStyleValues</a></li><li><a href="global.html#dySTYLE_BoxModelValues">dySTYLE_BoxModelValues</a></li><li><a href="global.html#dySTYLE_ColorNames">dySTYLE_ColorNames</a></li><li><a href="global.html#dySTYLE_CursorValues">dySTYLE_CursorValues</a></li><li><a href="global.html#dySTYLE_DisplayValues">dySTYLE_DisplayValues</a></li><li><a href="global.html#dySTYLE_FlexValues">dySTYLE_FlexValues</a></li><li><a href="global.html#dySTYLE_FontFamilyValues">dySTYLE_FontFamilyValues</a></li><li><a href="global.html#dySTYLE_FontSizeValues">dySTYLE_FontSizeValues</a></li><li><a href="global.html#dySTYLE_FontStretchValues">dySTYLE_FontStretchValues</a></li><li><a href="global.html#dySTYLE_FontStyleValues">dySTYLE_FontStyleValues</a></li><li><a href="global.html#dySTYLE_FontVariantValues">dySTYLE_FontVariantValues</a></li><li><a href="global.html#dySTYLE_FontWeightValues">dySTYLE_FontWeightValues</a></li><li><a href="global.html#dySTYLE_GridValues">dySTYLE_GridValues</a></li><li><a href="global.html#dySTYLE_HeightValues">dySTYLE_HeightValues</a></li><li><a href="global.html#dySTYLE_ImageValues">dySTYLE_ImageValues</a></li><li><a href="global.html#dySTYLE_InternalStyleElement">dySTYLE_InternalStyleElement</a></li><li><a href="global.html#dySTYLE_ListStylePositionValues">dySTYLE_ListStylePositionValues</a></li><li><a href="global.html#dySTYLE_ListStyleTypeValues">dySTYLE_ListStyleTypeValues</a></li><li><a href="global.html#dySTYLE_MediaQueryCSSBucket">dySTYLE_MediaQueryCSSBucket</a></li><li><a href="global.html#dySTYLE_OverflowValues">dySTYLE_OverflowValues</a></li><li><a href="global.html#dySTYLE_PositionValues">dySTYLE_PositionValues</a></li><li><a href="global.html#dySTYLE_Properties">dySTYLE_Properties</a></li><li><a href="global.html#dySTYLE_RegularCSSBucket">dySTYLE_RegularCSSBucket</a></li><li><a href="global.html#dySTYLE_TextAlignValues">dySTYLE_TextAlignValues</a></li><li><a href="global.html#dySTYLE_TextDecorationLineValues">dySTYLE_TextDecorationLineValues</a></li><li><a href="global.html#dySTYLE_TextDecorationStyleValues">dySTYLE_TextDecorationStyleValues</a></li><li><a href="global.html#dySTYLE_TextOverflowValues">dySTYLE_TextOverflowValues</a></li><li><a href="global.html#dySTYLE_TextTransformValues">dySTYLE_TextTransformValues</a></li><li><a href="global.html#dySTYLE_TransitionValues">dySTYLE_TransitionValues</a></li><li><a href="global.html#dySTYLE_Values">dySTYLE_Values</a></li><li><a href="global.html#dySTYLE_VerticalAlignValues">dySTYLE_VerticalAlignValues</a></li><li><a href="global.html#dySTYLE_VisibilityValues">dySTYLE_VisibilityValues</a></li><li><a href="global.html#dySTYLE_WidthValues">dySTYLE_WidthValues</a></li><li><a href="global.html#lcsRunDyStyleDependency">lcsRunDyStyleDependency</a></li><li><a href="global.html#lengthsPattern">lengthsPattern</a></li><li><a href="global.html#propertiesPattern">propertiesPattern</a></li><li><a href="global.html#valuesOnlyPattern">valuesOnlyPattern</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="dySTYLE.html">dySTYLE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AllValues">AllValues</a></li><li><a href="global.html#allOfTypeSpecsSelection">allOfTypeSpecsSelection</a></li><li><a href="global.html#dySTYLE_BorderStyleValues">dySTYLE_BorderStyleValues</a></li><li><a href="global.html#dySTYLE_BoxModelValues">dySTYLE_BoxModelValues</a></li><li><a href="global.html#dySTYLE_ColorNames">dySTYLE_ColorNames</a></li><li><a href="global.html#dySTYLE_CursorValues">dySTYLE_CursorValues</a></li><li><a href="global.html#dySTYLE_DisplayValues">dySTYLE_DisplayValues</a></li><li><a href="global.html#dySTYLE_FlexValues">dySTYLE_FlexValues</a></li><li><a href="global.html#dySTYLE_FontFamilyValues">dySTYLE_FontFamilyValues</a></li><li><a href="global.html#dySTYLE_FontSizeValues">dySTYLE_FontSizeValues</a></li><li><a href="global.html#dySTYLE_FontStretchValues">dySTYLE_FontStretchValues</a></li><li><a href="global.html#dySTYLE_FontStyleValues">dySTYLE_FontStyleValues</a></li><li><a href="global.html#dySTYLE_FontVariantValues">dySTYLE_FontVariantValues</a></li><li><a href="global.html#dySTYLE_FontWeightValues">dySTYLE_FontWeightValues</a></li><li><a href="global.html#dySTYLE_GridValues">dySTYLE_GridValues</a></li><li><a href="global.html#dySTYLE_HeightValues">dySTYLE_HeightValues</a></li><li><a href="global.html#dySTYLE_ImageValues">dySTYLE_ImageValues</a></li><li><a href="global.html#dySTYLE_InternalStyleElement">dySTYLE_InternalStyleElement</a></li><li><a href="global.html#dySTYLE_ListStylePositionValues">dySTYLE_ListStylePositionValues</a></li><li><a href="global.html#dySTYLE_ListStyleTypeValues">dySTYLE_ListStyleTypeValues</a></li><li><a href="global.html#dySTYLE_MediaQueryCSSBucket">dySTYLE_MediaQueryCSSBucket</a></li><li><a href="global.html#dySTYLE_OverflowValues">dySTYLE_OverflowValues</a></li><li><a href="global.html#dySTYLE_PositionValues">dySTYLE_PositionValues</a></li><li><a href="global.html#dySTYLE_Properties">dySTYLE_Properties</a></li><li><a href="global.html#dySTYLE_RegularCSSBucket">dySTYLE_RegularCSSBucket</a></li><li><a href="global.html#dySTYLE_TextAlignValues">dySTYLE_TextAlignValues</a></li><li><a href="global.html#dySTYLE_TextDecorationLineValues">dySTYLE_TextDecorationLineValues</a></li><li><a href="global.html#dySTYLE_TextDecorationStyleValues">dySTYLE_TextDecorationStyleValues</a></li><li><a href="global.html#dySTYLE_TextOverflowValues">dySTYLE_TextOverflowValues</a></li><li><a href="global.html#dySTYLE_TextTransformValues">dySTYLE_TextTransformValues</a></li><li><a href="global.html#dySTYLE_TransitionValues">dySTYLE_TransitionValues</a></li><li><a href="global.html#dySTYLE_Values">dySTYLE_Values</a></li><li><a href="global.html#dySTYLE_VerticalAlignValues">dySTYLE_VerticalAlignValues</a></li><li><a href="global.html#dySTYLE_VisibilityValues">dySTYLE_VisibilityValues</a></li><li><a href="global.html#dySTYLE_WidthValues">dySTYLE_WidthValues</a></li><li><a href="global.html#lcsNormalizeDyStyleCSSRule">lcsNormalizeDyStyleCSSRule</a></li><li><a href="global.html#lcsRunDyStyle">lcsRunDyStyle</a></li><li><a href="global.html#lengthsPattern">lengthsPattern</a></li><li><a href="global.html#propertiesPattern">propertiesPattern</a></li><li><a href="global.html#valuesOnlyPattern">valuesOnlyPattern</a></li></ul>
 </nav>
 
 <br class="clear">
