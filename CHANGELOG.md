@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.2.0...v1.2.1) (2025-01-07)
+
+
+### Refactoring
+
+* rename lcsRunDyStyleDependency to lcsRunDyStyle and add CSS normalization function ([4df7e74](https://github.com/lcsnigeria/lcs_dystyle/commit/4df7e7400def7ff9276befbd7f3d9fed86832674))
+* rename lcsRunDyStyleDependency to lcsRunDyStyle for consistency and clarity in documentation ([52b191c](https://github.com/lcsnigeria/lcs_dystyle/commit/52b191c616041300c98f3ab93f9ccec0eb658e50))
+
 ## [1.2.0](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.1.1...v1.2.0) (2024-11-15)
 
 
