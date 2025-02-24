@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/lcsnigeria/lcs_ajax/compare/v0.0.1...v0.0.2) (2025-02-24)
+
+
+### Refactoring
+
+* remove unused font files and scripts; enhance security handling in AJAX requests and modified readme docs ([df73d69](https://github.com/lcsnigeria/lcs_ajax/commit/df73d693848e669b4289ea8894306e237cca6db5))
+
 ### [0.0.1](https://github.com/lcsnigeria/lcs_ajax/compare/v1.2.1...v0.0.1) (2025-02-24)
 
 ### [1.2.1](https://github.com/lcsnigeria/lcs_dystyle/compare/v1.2.0...v1.2.1) (2025-01-07)
