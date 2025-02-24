@@ -1,158 +1,188 @@
-# LCS dySTYLE
+# **LCS Ajax**  
+*A secure and efficient JavaScript library for handling AJAX requests with nonce-based CSRF protection.*
 
-**LCS dySTYLE** is a dynamic, JavaScript-based CSS management library. It enables developers to apply complex, responsive, and custom styles directly through HTML class names, eliminating the need for static CSS files. This lightweight and flexible library supports pseudo-elements, sibling and child selectors, media queries, and direct style properties — all using class names.
+![LCS Ajax](https://img.shields.io/badge/version-0.0.0-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 
-## Features
+---
 
-- **Dynamic Styling**: Apply CSS styles dynamically with a structured class name syntax, reducing the need for external CSS files.
-- **Multi Styling**: Combine multiple CSS properties and values in a single class name for concise styling.
-- **Shortcut Patterns**: Use shortened syntax for common properties to streamline styling.
-- **Responsive Support**: Embed media queries in class names for responsive designs.
-- **Advanced Selectors**: Style sibling, child, and type-based elements directly through class names.
-- **Pseudo-Classes and Pseudo-Elements**: Use `:hover`, `:focus`, `::before`, and `::after` styles effortlessly.
-- **Customizable Control**: Use `data-dystyle="false"` to exclude specific elements or the entire body from `dySTYLE` processing.
+## **Table of Contents**
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Handling FormData](#handling-formdata)
+  - [Adding Custom Headers](#adding-custom-headers)
+  - [GET Requests](#get-requests)
+- [Security & CSRF Protection](#security--csrf-protection)
+- [API Reference](#api-reference)
+- [Error Handling](#error-handling)
+- [License](#license)
+- [Contributing](#contributing)
+- [Support](#support)
 
-## Installation
+---
 
-You can install `LCS dySTYLE` via npm:
+## **Introduction**
+`lcs_ajax` is a lightweight JavaScript library designed for making secure AJAX requests with **nonce-based CSRF protection**. It simplifies communication between the frontend and backend while ensuring **security and flexibility**.  
 
-```bash
-npm install lcs_dystyle
+Built using the **Fetch API**, `lcs_ajax` supports **JSON and FormData**, integrates seamlessly with APIs, and ensures **one request at a time** to prevent conflicts.  
+
+---
+
+## **Features**
+✅ **CSRF Protection** – Uses **nonce tokens** for secure communication.  
+✅ **Supports JSON & FormData** – Easily handles **both structured and file uploads**.  
+✅ **One-Request Policy** – Ensures **only one request runs at a time** for efficiency.  
+✅ **Custom Headers** – Allows adding extra **authentication or custom headers**.  
+✅ **Promise-based** – Fully **asynchronous and easy to work with `.then()` and `async/await`**.  
+✅ **Minimal & Fast** – **Lightweight** library optimized for performance.  
+
+---
+
+## **Installation**
+You can include `lcs_ajax` in your project using **npm** or directly via a CDN.  
+
+### **Using npm**
+```sh
+npm install lcs_ajax
 ```
 
-Or clone the repository from GitHub:
-
-```bash
-git clone https://github.com/lcsnigeria/lcs_dystyle.git
-```
-
-Then, include the script in your HTML:
-
+### **Using CDN (Direct Include)**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lcs_dystyle/dist/ld.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lcs_ajax/dist/la.min.js"></script>
 ```
 
-## Usage
+---
 
-Add the `lcs` prefix to your class names to dynamically apply styles. `LCS dySTYLE` interprets the class names as CSS rules, allowing direct styling through naming conventions.
+## **Usage**
+`lcs_ajax` simplifies AJAX requests using a **single function**:  
 
-### Example
-
-```html
-<!-- Basic style application -->
-<div class="lcsBackgroundColor_red"></div>
-
-<!-- Multi style application -->
-<div class="lcsBackgroundColor.PaddingTop_red.20px">Multi Styling Example</div>
-
-<!-- Shortcut pattern -->
-<div class="lcsBGC_lightblue">Light Blue Background using Shortcut</div>
-
-<!-- Responsive styling -->
-<div class="lcsMQMaxWidth600PX_FontSize_14px">Responsive Font Size</div>
-
-<!-- Pseudo-element styling (COMING SOON) -->
-<div class="lcsBefore_BackgroundColor_red">Pseudo-element Example</div>
-
-<!-- Advanced selectors (COMING SOON) -->
-<ul>
-  <li class="lcsSibling_BackgroundColor_lightblue">List Item with Sibling Styling</li>
-</ul>
+```js
+lcsSendAjaxRequest(data, url, method, headers);
 ```
 
-### Disabling dySTYLE on Specific Elements
+### **Basic Usage**
+```js
+const data = { action: 'get_user', user_id: 123 };
+const url = 'https://example.com/api/user';
 
-To disable `dySTYLE` on specific elements or the entire body, use the `data-dystyle="false"` attribute:
-
-```html
-<!-- Disables dySTYLE on this div -->
-<div data-dystyle="false" class="lcsBackgroundColor_red">This will not be styled by dySTYLE.</div>
-
-<!-- Disables dySTYLE on the entire body -->
-<body data-dystyle="false">
-  <!-- All elements inside the body will not be styled by dySTYLE -->
-</body>
+lcsSendAjaxRequest(data, url)
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
 ```
 
-## Class Name Structure
+---
 
-Class names are parsed by `LCS dySTYLE` and converted to CSS rules. Use the following structure to construct class names:
+### **Handling FormData**
+To **upload files**, simply pass a `FormData` object:
 
-```plaintext
-lcs[MediaQuery]_[SpecificSelector]_[PseudoClass]_[CSSProperty]_[CSSValue]
+```js
+const formData = new FormData();
+formData.append('action', 'upload_file');
+formData.append('file', fileInput.files[0]);
+
+lcsSendAjaxRequest(formData, 'https://example.com/api/upload')
+    .then(response => console.log('Upload Successful:', response))
+    .catch(error => console.error('Upload Failed:', error));
 ```
 
-### Class Name Syntax Details
+---
 
-- **Media Queries**: Prefix classes with `lcsMQ` for responsive styling.
-- **Multi Styling**: Define multiple properties and values in a single class name (e.g., `lcsBackgroundColor.PaddingTop_red.20px`).
-- **Shortcut Patterns**: Use shorthand syntax for frequently used properties, like `lcsBGC_lightblue` for `background-color: lightblue`.
-- **Advanced Selectors**: Use `lcsAllOfType`, `lcsSibling` (COMING SOON), `lcsChild` (COMING SOON), and similar selectors to apply styles to child or sibling elements.
-- **Pseudo-Classes and Pseudo-Elements**: Use `lcsHPE` (COMING SOON) for `:hover`, `lcsBPE` (COMING SOON) for `::before`, and other similar syntax.
-- **Direct Properties**: Apply specific styles using the format `lcs[Property]_[Value]`.
+### **Adding Custom Headers**
+You can **pass custom headers** like authentication tokens:
 
-### Example Syntax
-
-```html
-<!-- Direct property example -->
-<div class="lcsBackgroundColor_red">Red Background</div>
-
-<!-- Multi Styling example -->
-<div class="lcsBackgroundColor.Color.Padding_lightblue.white.10px">Multi Styled Element</div>
-
-<!-- Shortcut example -->
-<div class="lcsBGC_lightblue">Light Blue Background</div>
-
-<!-- Media query example -->
-<div class="lcsMQMaxWidth768PX_FontSize_12px">Font size 12px on screens 768px wide or smaller</div>
+```js
+const headers = { Authorization: 'Bearer YOUR_ACCESS_TOKEN' };
+lcsSendAjaxRequest({ action: 'get_data' }, 'https://example.com/api/data', 'POST', headers)
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
 ```
 
-## Internal Workings
+---
 
-`LCS dySTYLE` operates only on elements within the `body` tag and dynamically generates and injects CSS rules into the document’s internal style element. The library skips elements with `data-dystyle="false"` attributes, enabling selective styling control.
+### **GET Requests**
+For **GET requests**, simply pass `'GET'` as the method:
 
-## Manual Initialization
-
-In addition to automatically applying styles when the DOM content is loaded, `LCS dySTYLE` provides the `lcsRunDyStyle` function for users who want more control over when the `dySTYLE` processing starts. This allows developers to delay or manually trigger the processing of styles to suit specific application needs.
-
-### Purpose
-
-By default, `LCS dySTYLE` processes all elements with matching class names as soon as the DOM content is fully loaded. However, if you want to defer this process or apply styles dynamically after certain events (e.g., loading additional content via AJAX), you can call the `lcsRunDyStyle` function manually.
-
-### Example
-
-```javascript
-// Delayed initialization
-document.addEventListener("DOMContentLoaded", function () {
-    // Perform custom operations before initializing dySTYLE
-    lcsRunDyStyle(); // Manually initialize dySTYLE processing
-});
-
-// Example of using after dynamically adding content
-function addContentAndStyle() {
-    const newDiv = document.createElement('div');
-    newDiv.className = 'lcsBackgroundColor_red';
-    document.body.appendChild(newDiv);
-
-    // Manually re-run dySTYLE to process new content
-    lcsRunDyStyle();
-}
+```js
+lcsSendAjaxRequest({}, 'https://example.com/api/posts', 'GET')
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
 ```
 
-### Use Cases
+---
 
-- **Lazy Loading**: Apply styles only after certain elements are loaded or added to the DOM.
-- **Dynamic Content**: Process styles for elements added dynamically via JavaScript or AJAX.
-- **Selective Initialization**: Defer initialization until specific application events occur.
+## **Security & CSRF Protection**
+🔒 `lcs_ajax` **automatically** attaches a nonce to every request to prevent CSRF attacks.  
 
-### Disabling Automatic Initialization
+- **Nonce Fetching**: The function calls `lcsGetNonce()` to retrieve a fresh token.  
+- **Automatic Injection**: The nonce is added to the request (`data.security = nonce`).  
+- **Prevents Unauthorized Access**: If nonce retrieval fails, the request is rejected.
 
-To fully control when `lcsRunDyStyle` is called, you can disable the automatic initialization by removing the `DOMContentLoaded` listener in the library's source code or simply allowing it to execute as-is without affecting manual calls.
+🔹 **Handling Nonce Failures**
+If nonce verification fails, you’ll receive:
+```json
+{ "success": false, "data": "Failed to verify client!" }
+```
 
-## Development
+---
 
-For contributing, clone the repository and open a pull request with your updates. Contributions, issue reporting, and feature requests are welcome.
+## **API Reference**
+### **`lcsSendAjaxRequest(data, url, method, headers)`**
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `data` | `Object | FormData` | `{}` | Request payload (JSON or FormData) |
+| `url` | `String` | `lcs_ajax_object.ajaxurl` | API endpoint |
+| `method` | `String` | `'POST'` | HTTP method (`GET`, `POST`, etc.) |
+| `headers` | `Object` | `{}` | Custom request headers |
 
-## License
+#### **Returns**
+A `Promise` resolving to the **response JSON**.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+---
+
+## **Error Handling**
+If a request fails, `lcs_ajax` **rejects** the Promise with an error message.  
+
+### **Example**
+```js
+lcsSendAjaxRequest({ action: 'get_posts' }, 'https://example.com/api/posts')
+    .then(response => console.log(response))
+    .catch(error => console.error('Error:', error.message));
+```
+
+#### **Common Errors**
+| Error | Cause |
+|-------|-------|
+| `Failed to verify client!` | Nonce retrieval failed |
+| `Request failed due to server error!` | Network/server issue |
+| `Expected JSON but received: text/html` | API returned invalid response |
+
+---
+
+## **License**
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## **Contributing**
+Want to improve `lcs_ajax`? Contributions are welcome!  
+
+🔹 **Fork the repository**  
+🔹 **Create a feature branch** (`git checkout -b feature-name`)  
+🔹 **Commit changes** (`git commit -m "Add feature"`)  
+🔹 **Push and create a Pull Request**  
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## **Support**
+💬 **Found a bug or need help?** Open an issue at:  
+[📌 GitHub Issues](https://github.com/lcsnigeria/lcs_ajax/issues)
+
+📧 **Contact**: jcfuniverse@gmail.com  
+
+---
+
+🚀 **LCS Ajax: Secure AJAX Requests Made Simple!** 🚀  

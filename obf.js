@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Input file and output directory
-const inputFilePath = './src/ld.js';
+const inputFilePath = './src/la.js';
 const outputDirectory = './dist';
-const outputFilePath = path.join(outputDirectory, 'ld.min.js');
+const outputFilePath = path.join(outputDirectory, 'la.min.js');
 
 // Function to clear the output directory
 const clearOutputDirectory = (directory) => {
@@ -33,7 +33,7 @@ const obfuscationOptions = {
     renameGlobals: false // Avoid renaming globals to prevent conflicts
 };
 
-// Obfuscate ld.js and output to ld.min.js
+// Obfuscate la.js and output to la.min.js
 const obfuscateFile = (inputPath, outputPath) => {
     try {
         const inputCode = fs.readFileSync(inputPath, 'utf8');
@@ -50,5 +50,5 @@ const obfuscateFile = (inputPath, outputPath) => {
     }
 };
 
-// Run obfuscation on ld.js
+// Run obfuscation on la.js
 obfuscateFile(inputFilePath, outputFilePath);

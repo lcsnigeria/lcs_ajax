@@ -1,11 +1,11 @@
 {
-  "name": "lcs_dystyle",
-  "version": "1.2.1",
-  "description": "LCS dySTYLE: A powerful JavaScript library for dynamic, class-based CSS styling. Apply responsive, complex, and custom styles directly through HTML class names, eliminating the need for external CSS files.",
-  "main": "dist/ld.min.js",
-  "module": "src/ld.js",
+  "name": "lcs_ajax",
+  "version": "0.0.0",
+  "description": "LCS Ajax: A powerful JavaScript library for handling AJAX requests securely with nonce-based CSRF protection, asynchronous data handling, and easy integration with APIs.",
+  "main": "dist/la.min.js",
+  "module": "src/la.js",
   "files": [
-    "dist/ld.min.js"
+    "dist/la.min.js"
   ],
   "scripts": {
     "build": "node obf.js && jsdoc -c jsdoc.json",
@@ -14,23 +14,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lcsnigeria/lcs_dystyle.git"
+    "url": "git+https://github.com/lcsnigeria/lcs_ajax.git"
   },
   "keywords": [
-    "css",
-    "dynamic styling",
-    "responsive design",
-    "JavaScript",
-    "class-based styling",
-    "media queries",
-    "pseudo-elements"
+    "ajax",
+    "fetch-api",
+    "csrf-protection",
+    "security",
+    "javascript",
+    "async",
+    "http-requests",
+    "lcs",
+    "lcs-ajax",
+    "api-integration",
+    "web-development",
+    "nonce",
+    "secure-ajax"
   ],
   "author": "jcfuniverse",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lcsnigeria/lcs_dystyle/issues"
+    "url": "https://github.com/lcsnigeria/lcs_ajax/issues"
   },
-  "homepage": "https://github.com/lcsnigeria/lcs_dystyle#readme",
+  "homepage": "https://github.com/lcsnigeria/lcs_ajax#readme",
   "devDependencies": {
     "javascript-obfuscator": "^4.1.1",
     "jest": "^29.7.0",
@@ -72,8 +78,8 @@
         "section": "Performance Improvements"
       }
     ],
-    "commitUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/commit/{{hash}}",
-    "compareUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/compare/{{previousTag}}...{{currentTag}}",
-    "issueUrlFormat": "https://github.com/lcsnigeria/lcs_dystyle/issues/{{id}}"
+    "commitUrlFormat": "https://github.com/lcsnigeria/lcs_ajax/commit/{{hash}}",
+    "compareUrlFormat": "https://github.com/lcsnigeria/lcs_ajax/compare/{{previousTag}}...{{currentTag}}",
+    "issueUrlFormat": "https://github.com/lcsnigeria/lcs_ajax/issues/{{id}}"
   }
 }
