@@ -54,6 +54,22 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
             ...headers
         };
 
+        // Append a flag to indicate if the request is secured (includes a nonce).
+        if (isFormData) {
+            data.append('is_secured', false);
+        } else {
+            data.is_secured = false;
+        }
+
+        // If data.security or data.nonce is set to false, set is_secured to true.
+        if (data.security === false || data.nonce === false) {
+            if (isFormData) {
+                data.append('is_secured', true);
+            } else {
+                data.is_secured = true;
+            }
+        }
+
         /**
          * Attach a nonce for security verification if required.
          * The nonce is added to the request to prevent CSRF attacks.
@@ -61,22 +77,39 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
          */
         if (data.security !== false && data.nonce !== false) {
             try {
-                const nonce = await lcsGetNonce();
+                // Default nonce name
+                let nonce_name = 'lcs_ajax_nonce';
+
+                // Determine the nonce name based on the data structure.
+                if (isFormData) {
+                    if (data.has('nonce_name')) {
+                        nonce_name = data.get('nonce_name');
+                    }
+                } else {
+                    if (data.hasOwnProperty('nonce_name')) {
+                        nonce_name = data.nonce_name;
+                    }
+                }
+
+                // Fetch the nonce from the server.
+                const nonce = await lcsGetNonce(nonce_name);
                 if (isFormData) {
                     data.append('security', nonce); // Append nonce for FormData.
-                    data.append('nonce_is_settled', true);
+                    data.append('nonce', nonce); // Append nonce for FormData.
+                    data.append('is_secured', true);
                 } else {
                     data.security = nonce; // Add nonce for JSON data.
-                    data.nonce_is_settled = true;
+                    data.nonce = nonce; // Add nonce for JSON data.
+                    data.is_secured = true;
                 }
             } catch (error) {
                 if (isFormData) {
-                    if (!data.has('nonce_is_settled')) {
-                        data.append('nonce_is_settled', false);
+                    if (!data.has('is_secured')) {
+                        data.append('is_secured', false);
                     }
                 } else {
-                    if (!data.hasOwnProperty('nonce_is_settled')) {
-                        data.nonce_is_settled = false;
+                    if (!data.hasOwnProperty('is_secured')) {
+                        data.is_secured = false;
                     }
                 }  
                 console.error("Error occurred while fetching nonce:", error.message);

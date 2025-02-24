@@ -112,12 +112,73 @@ lcsSendAjaxRequest({}, 'https://example.com/api/posts', 'GET')
 
 ---
 
-## **Security & CSRF Protection**
-🔒 `lcs_ajax` **automatically** attaches a nonce to every request to prevent CSRF attacks.  
+## **Security & CSRF Protection**  
+🔒 By default, `lcs_ajax` **automatically** attaches a nonce to every request to prevent CSRF attacks. While you can disable this (not recommended) by setting either the `nonce` or `security` key to `false` in your request data, we strongly advise against it.  
 
-- **Nonce Fetching**: The function calls `lcsGetNonce()` to retrieve a fresh token.  
-- **Automatic Injection**: The nonce is added to the request (`data.security = nonce`).  
-- **Prevents Unauthorized Access**: If nonce retrieval fails, the request is rejected.
+### **Example Usage**  
+
+#### **For JSON Requests:**  
+```js
+const data = { action: 'get_user', user_id: 123, nonce: false }; // OR -> security: false
+```
+
+#### **For FormData Requests:**  
+```js
+const formData = new FormData();
+formData.append('action', 'upload_file');
+formData.append('file', fileInput.files[0]);
+formData.append('nonce', false); // OR -> formData.append('security', false);
+```
+
+### **How CSRF Protection Works**  
+1. **Nonce Fetching:** The function calls `lcsGetNonce()` to retrieve a fresh nonce token.  
+2. **Automatic Injection:** The retrieved nonce is added to the request (`data.security = nonce` and `data.nonce = nonce`).  
+3. **Request Validation:** If nonce retrieval fails, the request is rejected to prevent unauthorized access.  
+
+### **Handling Nonce Verification in the Backend**  
+For a request to proceed, `lcsGetNonce()` must return a valid response. Once successful, an `is_secured` flag is set to `true` in your request data. By default, this flag is `false`, ensuring that only requests with a fresh, valid nonce are processed.  
+
+Your backend should validate the `is_secured` flag and, if necessary, verify the nonce manually.  
+
+#### **PHP Backend Implementation:**  
+```php
+$jsonData = file_get_contents("php://input"); // Retrieve request data
+$data = json_decode($jsonData, true);
+$nonce_retrieved = isset($data['is_secured']) && $data['is_secured'];
+
+// Check if this is the initial nonce request
+if (!$nonce_retrieved) {
+    // Generate a new nonce and return it to the client
+    $nonce_name = $data['nonce_name'];
+    $nonce = your_logic_function_for_generating_nonce($nonce_name);
+    
+    $response = [
+        'success' => true,
+        'data' => $nonce
+    ];
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+
+// Proceed with request processing (verify nonce if necessary)
+```
+
+### **Handling Requests When Nonce is Disabled**  
+If nonce verification is disabled on the client side (`nonce: false` or `security: false` in the request), the backend **does not need to generate, validate, or store nonces**. In this case:  
+- The request will **not** include a nonce.  
+- The backend should **skip nonce validation** and process the request normally.  
+- Other security measures (e.g., authentication, role validation) should still be enforced.  
+
+### **Key Takeaways:**  
+✅ The first request generates and retrieves a nonce.  
+✅ The actual request includes `is_secured = true` to confirm nonce verification.  
+✅ **If nonce verification is disabled on the client side, you do not need to handle nonces on the backend.**  
+
+By implementing these security measures, `lcs_ajax` ensures that all AJAX requests remain **protected against CSRF attacks**, providing a **secure and reliable** communication channel between the frontend and backend.  
+
+---
 
 🔹 **Handling Nonce Failures**
 If nonce verification fails, you’ll receive:
