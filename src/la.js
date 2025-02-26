@@ -1,5 +1,3 @@
-
-
 const lcs_ajax_object_meta = document.querySelector('meta[name="lcs_ajax_object"]'); // Get the AJAX object meta tag.
 const lcs_ajax_object = lcs_ajax_object_meta ? JSON.parse(lcs_ajax_object_meta.content) : {}; // Parse the AJAX object from the meta tag.
 let isRunningAjax = false; // A flag to ensure only one AJAX request runs at a time.
@@ -54,32 +52,47 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
             ...headers
         };
 
-        // Append a flag to indicate if the request is secured (includes a nonce).
+        let isSecureRequest = true;
         if (isFormData) {
-            data.append('is_secured', false);
-        } else {
-            data.is_secured = false;
-        }
-
-        // If data.security or data.nonce is set to false, set is_secured to true.
-        if (data.security === false || data.nonce === false) {
-            if (isFormData) {
-                data.append('is_secured', true);
-            } else {
-                data.is_secured = true;
+            // Append a flag to indicate if the request is secured.
+            data.append('isNonceRetrieval', true);
+        
+            // Initialize data.secure if not set.
+            if (!data.has('secure')) {
+                data.append('secure', true);
             }
-        }
+        
+            // If secure is explicitly set to false, mark the request as secured.
+            if (data.get('secure') === false) {
+                isSecureRequest = false;
+                data.append('isNonceRetrieval', false);
+            }
+        } else {
+            // Append a flag to indicate if the request is secured.
+            data.isNonceRetrieval = true;
+        
+            // Initialize data.secure if not set.
+            if (!data.hasOwnProperty('secure')) {
+                data.secure = true;
+            }
+        
+            // If secure is explicitly set to false, mark the request as secured.
+            if (data.secure === false) {
+                isSecureRequest = false;
+                data.isNonceRetrieval = false;
+            }
+        }        
 
         /**
          * Attach a nonce for security verification if required.
          * The nonce is added to the request to prevent CSRF attacks.
          * If nonce retrieval fails, the request is aborted.
          */
-        if (data.security !== false && data.nonce !== false) {
+        if (isSecureRequest) {
             try {
                 // Default nonce name
                 let nonce_name = 'lcs_ajax_nonce';
-
+                const nonce_data = {};
                 // Determine the nonce name based on the data structure.
                 if (isFormData) {
                     if (data.has('nonce_name')) {
@@ -90,28 +103,23 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
                         nonce_name = data.nonce_name;
                     }
                 }
+                nonce_data.nonce_name = nonce_name;
+                nonce_data.isNonceRetrieval = true;
 
                 // Fetch the nonce from the server.
-                const nonce = await lcsGetNonce(nonce_name);
+                const nonce = await lcsGetNonce(nonce_data, url);
+                
                 if (isFormData) {
-                    data.append('security', nonce); // Append nonce for FormData.
                     data.append('nonce', nonce); // Append nonce for FormData.
-                    data.append('is_secured', true);
+                    data.append('nonce_name', nonce_name); // Append nonce_name
+                    data.delete('isNonceRetrieval');
                 } else {
-                    data.security = nonce; // Add nonce for JSON data.
                     data.nonce = nonce; // Add nonce for JSON data.
-                    data.is_secured = true;
+                    data.nonce_name = nonce_name; // Add nonce_name
+                    delete data.isNonceRetrieval;
                 }
-            } catch (error) {
-                if (isFormData) {
-                    if (!data.has('is_secured')) {
-                        data.append('is_secured', false);
-                    }
-                } else {
-                    if (!data.hasOwnProperty('is_secured')) {
-                        data.is_secured = false;
-                    }
-                }  
+                
+            } catch (error) { 
                 console.error("Error occurred while fetching nonce:", error.message);
                 isRunningAjax = false; // Reset flag
                 return reject(new Error("Failed to fetch nonce, aborting request."));
@@ -140,10 +148,6 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
                 throw new Error(`Expected JSON but received: ${contentType}. Response: ${textResponse}`);
             }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
             const responseData = await response.json();
             resolve(responseData);
         } catch (error) {
@@ -162,20 +166,21 @@ async function lcsSendAjaxRequest(data, url = lcs_ajax_object.ajaxurl || '', met
  * The function sends a request to the server to fetch a nonce, which can be used for 
  * securing AJAX requests. The nonce is stored in a global object and returned once fetched.
  * 
- * @param {string} nonceName The name of the nonce to fetch. Defaults to 'lcs_ajax_nonce'.
+ * @param {object} nonceData The object data containing name of the nonce to fetch and flag indicating it is a request to fetch none. 
+ * 
  * @returns {Promise<string>} A Promise that resolves with the fetched nonce string.
  * @throws {Error} Throws an error if the request fails or the server responds with an error.
  */
-async function lcsGetNonce(nonceName = 'lcs_ajax_nonce') {
+async function lcsGetNonce(nonceData, url) {
     // Return a new Promise to handle asynchronous behavior
     return new Promise((resolve, reject) => {
-        const url = lcs_ajax_object.ajaxurl; // Use the default AJAX endpoint.
 
         /**
          * Define the request payload for fetching the nonce.
          */
         const requestData = {
-            nonce_name: nonceName // Specify the nonce name.
+            nonce_name: nonceData.nonce_name, // Specify the nonce name.
+            isNonceRetrieval: nonceData.isNonceRetrieval
         };
 
         // Make the request using the Fetch API
@@ -197,7 +202,7 @@ async function lcsGetNonce(nonceName = 'lcs_ajax_nonce') {
 
                 // Update the global nonce object with the fetched nonce
                 lcs_ajax_object.nonce = responseData.data;
-
+                
                 // Resolve the promise with the fetched nonce
                 resolve(lcs_ajax_object.nonce);
             });
