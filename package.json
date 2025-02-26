@@ -1,6 +1,6 @@
 {
   "name": "lcs_ajax",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "LCS Ajax: A powerful JavaScript library for handling AJAX requests securely with nonce-based CSRF protection, asynchronous data handling, and easy integration with APIs.",
   "main": "dist/la.min.js",
   "module": "src/la.js",
